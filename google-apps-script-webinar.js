@@ -24,6 +24,7 @@ function doPost(e) {
       data.name || "",
       data.phone || "",
       data.age || "",
+      data.country || "",
       data.state || "",
       data.city || ""
     ]);
@@ -63,10 +64,10 @@ function getOrCreateSheet() {
     sheet.setName(SHEET_NAME);
     
     // Add headers
-    sheet.appendRow(["Date", "Time", "Full Name", "Phone Number", "Age", "State", "City"]);
+    sheet.appendRow(["Date", "Time", "Full Name", "Phone Number", "Age", "Country", "State", "City"]);
     
     // Format header row
-    var headerRange = sheet.getRange(1, 1, 1, 7);
+    var headerRange = sheet.getRange(1, 1, 1, 8);
     headerRange.setFontWeight("bold");
     headerRange.setBackground("#F5C518");
     headerRange.setFontColor("#000000");
@@ -77,8 +78,9 @@ function getOrCreateSheet() {
     sheet.setColumnWidth(3, 180);  // Name
     sheet.setColumnWidth(4, 150);  // Phone
     sheet.setColumnWidth(5, 60);   // Age
-    sheet.setColumnWidth(6, 140);  // State
-    sheet.setColumnWidth(7, 140);  // City
+    sheet.setColumnWidth(6, 130);  // Country
+    sheet.setColumnWidth(7, 140);  // State
+    sheet.setColumnWidth(8, 140);  // City
     
     // Freeze header row
     sheet.setFrozenRows(1);
