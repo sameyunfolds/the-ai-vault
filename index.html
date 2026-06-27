@@ -300,6 +300,132 @@ ul{list-style:none}
 .link-row:hover .link-arrow{transform:translateX(3px)}
 
 /* ══════════════════════════════════════════
+   WEBINAR INTEREST POPUP
+   ══════════════════════════════════════════ */
+.w-popup-overlay{
+  position:fixed;inset:0;z-index:300;
+  background:rgba(0,0,0,0.9);
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.3s ease;
+}
+.w-popup-overlay.active{opacity:1;pointer-events:auto}
+.w-popup{
+  background:#141414;border:1px solid var(--yellow);
+  border-radius:20px;width:100%;max-width:420px;
+  overflow:hidden;
+  transform:translateY(20px) scale(0.96);
+  transition:transform 0.35s ease;
+}
+.w-popup-overlay.active .w-popup{transform:translateY(0) scale(1)}
+.w-popup-head{
+  background:var(--yellow);padding:18px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.w-popup-head .w-title{
+  font-family:var(--font-heading);font-size:15px;font-weight:700;
+  color:#000;line-height:1.3;
+}
+.w-popup-head .w-close{
+  width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,0.12);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;color:#000;transition:var(--transition);flex-shrink:0;
+}
+.w-popup-head .w-close:hover{background:rgba(0,0,0,0.22)}
+.w-popup-body{padding:24px 20px}
+.w-popup-body .w-heading{
+  font-family:var(--font-heading);font-size:20px;font-weight:700;
+  color:#FFF;margin-bottom:8px;line-height:1.2;letter-spacing:-0.02em;
+}
+.w-popup-body .w-heading span{color:var(--yellow)}
+.w-popup-body .w-sub{
+  font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.5;
+}
+.w-btn-row{display:flex;gap:10px}
+.w-btn{
+  flex:1;padding:13px 20px;border-radius:var(--radius-btn);
+  font-family:var(--font-heading);font-size:14px;font-weight:700;
+  transition:var(--transition);text-align:center;
+}
+.w-btn-yes{
+  background:var(--yellow);color:#000;
+}
+.w-btn-yes:hover{background:#FFD629;transform:translateY(-1px)}
+.w-btn-no{
+  background:transparent;color:var(--muted);
+  border:1px solid var(--border);
+}
+.w-btn-no:hover{border-color:var(--muted);color:#FFF}
+
+/* Step 2 — Form */
+.w-form-group{margin-bottom:14px}
+.w-form-group label{
+  display:block;font-size:12px;color:var(--muted);font-weight:600;
+  margin-bottom:6px;font-family:var(--font-heading);letter-spacing:0.02em;
+}
+.w-form-group label .w-req{color:#E53935}
+.w-form-group input,
+.w-form-group select{
+  width:100%;padding:11px 14px;border-radius:10px;
+  border:1px solid var(--border);background:#1a1a1a;color:#FFF;
+  font-size:14px;font-family:var(--font-body);
+  transition:var(--transition);outline:none;
+}
+.w-form-group input:focus,
+.w-form-group select:focus{border-color:var(--yellow);background:#1f1f1f}
+.w-form-group select{appearance:auto;cursor:pointer}
+.w-form-group .w-error{
+  font-size:11px;color:#E53935;margin-top:4px;display:none;
+}
+.w-form-group.has-error .w-error{display:block}
+.w-form-group.has-error input,
+.w-form-group.has-error select{border-color:#E53935}
+.w-phone-row{display:flex;gap:8px}
+.w-phone-row select{width:90px;flex-shrink:0}
+.w-phone-row input{flex:1}
+.w-submit{
+  width:100%;padding:14px;border-radius:var(--radius-btn);
+  background:var(--yellow);color:#000;border:none;
+  font-family:var(--font-heading);font-size:15px;font-weight:700;
+  cursor:pointer;transition:var(--transition);margin-top:6px;
+}
+.w-submit:hover{background:#FFD629;transform:translateY(-1px)}
+.w-submit:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+
+/* Step 3 — Confirmation */
+.w-confirm{text-align:center;padding:12px 0}
+.w-confirm .w-check{
+  width:52px;height:52px;border-radius:50%;
+  background:rgba(245,197,24,0.12);color:var(--yellow);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;margin:0 auto 16px;
+}
+.w-confirm .w-done-text{
+  font-family:var(--font-heading);font-size:18px;font-weight:700;
+  color:#FFF;margin-bottom:8px;
+}
+.w-confirm .w-done-sub{
+  font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:20px;
+}
+.w-confirm .w-done-btn{
+  display:inline-flex;padding:10px 28px;border-radius:var(--radius-btn);
+  background:var(--yellow);color:#000;
+  font-family:var(--font-heading);font-size:13px;font-weight:700;
+  transition:var(--transition);
+}
+.w-confirm .w-done-btn:hover{background:#FFD629}
+
+/* Loading spinner */
+.w-spinner{
+  width:18px;height:18px;border:2px solid rgba(0,0,0,0.2);
+  border-top-color:#000;border-radius:50%;
+  animation:wspin 0.6s linear infinite;display:inline-block;
+  vertical-align:middle;margin-right:6px;
+}
+@keyframes wspin{to{transform:rotate(360deg)}}
+
+/* ══════════════════════════════════════════
    FOOTER
    ══════════════════════════════════════════ */
 .footer{
@@ -417,6 +543,135 @@ ul{list-style:none}
       <button class="modal-close" id="modalClose" aria-label="Close modal">&#10005;</button>
     </div>
     <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     WEBINAR INTEREST POPUP
+     ══════════════════════════════════════─ -->
+<div class="w-popup-overlay" id="webinarPopup" role="dialog" aria-modal="true" aria-label="Webinar interest">
+  <div class="w-popup">
+    <div class="w-popup-head">
+      <span class="w-title">Free AI Webinar</span>
+      <button class="w-close" id="wPopupClose" aria-label="Close popup">&#10005;</button>
+    </div>
+    <div class="w-popup-body" id="wPopupBody">
+      <!-- Step 1: Yes / No -->
+      <div id="wStep1">
+        <p class="w-heading">We're having a <span>free AI webinar</span>.</p>
+        <p class="w-sub">Interested? Leave your details and we'll invite you.</p>
+        <div class="w-btn-row">
+          <button class="w-btn w-btn-yes" id="wBtnYes">Yes, I'm interested</button>
+          <button class="w-btn w-btn-no" id="wBtnNo">No, maybe later</button>
+        </div>
+      </div>
+      <!-- Step 2: Collect Details -->
+      <div id="wStep2" style="display:none">
+        <p class="w-heading">Confirm your <span>free spot</span></p>
+        <p class="w-sub">Only takes 30 seconds. We'll reach out with webinar details.</p>
+        <form id="wForm" novalidate>
+          <div class="w-form-group" id="wg-name">
+            <label>Full Name <span class="w-req">*</span></label>
+            <input type="text" id="wName" placeholder="First + Last name" required>
+            <div class="w-error">Please enter your full name</div>
+          </div>
+          <div class="w-form-group" id="wg-phone">
+            <label>Phone Number <span class="w-req">*</span></label>
+            <div class="w-phone-row">
+              <select id="wCountryCode">
+                <option value="+91">🇮🇳 +91</option>
+                <option value="+1">🇺🇸 +1</option>
+                <option value="+44">🇬🇧 +44</option>
+                <option value="+61">🇦🇺 +61</option>
+                <option value="+971">🇦🇪 +971</option>
+                <option value="+65">🇸🇬 +65</option>
+                <option value="+49">🇩🇪 +49</option>
+                <option value="+33">🇫🇷 +33</option>
+                <option value="+81">🇯🇵 +81</option>
+                <option value="+86">🇨🇳 +86</option>
+                <option value="+966">🇸🇦 +966</option>
+                <option value="+92">🇵🇰 +92</option>
+                <option value="+880">🇧🇩 +880</option>
+                <option value="+64">🇳🇿 +64</option>
+                <option value="+353">🇮🇪 +353</option>
+                <option value="+39">🇮🇹 +39</option>
+                <option value="+34">🇪🇸 +34</option>
+                <option value="+31">🇳🇱 +31</option>
+                <option value="+47">🇳🇴 +47</option>
+                <option value="+46">🇸🇪 +46</option>
+                <option value="+90">🇹🇷 +90</option>
+              </select>
+              <input type="tel" id="wPhone" placeholder="Phone number" maxlength="15" required>
+            </div>
+            <div class="w-error">Enter a valid 10-digit phone number</div>
+          </div>
+          <div class="w-form-group" id="wg-age">
+            <label>Age <span class="w-req">*</span></label>
+            <input type="number" id="wAge" placeholder="Your age" min="13" max="80" required>
+            <div class="w-error">Enter a valid age (13–80)</div>
+          </div>
+          <div class="w-form-group" id="wg-state">
+            <label>State <span class="w-req">*</span></label>
+            <select id="wState" required>
+              <option value="">Select your state</option>
+              <option value="Andhra Pradesh">Andhra Pradesh</option>
+              <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+              <option value="Assam">Assam</option>
+              <option value="Bihar">Bihar</option>
+              <option value="Chhattisgarh">Chhattisgarh</option>
+              <option value="Delhi">Delhi</option>
+              <option value="Goa">Goa</option>
+              <option value="Gujarat">Gujarat</option>
+              <option value="Haryana">Haryana</option>
+              <option value="Himachal Pradesh">Himachal Pradesh</option>
+              <option value="Jharkhand">Jharkhand</option>
+              <option value="Karnataka">Karnataka</option>
+              <option value="Kerala">Kerala</option>
+              <option value="Madhya Pradesh">Madhya Pradesh</option>
+              <option value="Maharashtra">Maharashtra</option>
+              <option value="Manipur">Manipur</option>
+              <option value="Meghalaya">Meghalaya</option>
+              <option value="Mizoram">Mizoram</option>
+              <option value="Nagaland">Nagaland</option>
+              <option value="Odisha">Odisha</option>
+              <option value="Punjab">Punjab</option>
+              <option value="Rajasthan">Rajasthan</option>
+              <option value="Sikkim">Sikkim</option>
+              <option value="Tamil Nadu">Tamil Nadu</option>
+              <option value="Telangana">Telangana</option>
+              <option value="Tripura">Tripura</option>
+              <option value="Uttar Pradesh">Uttar Pradesh</option>
+              <option value="Uttarakhand">Uttarakhand</option>
+              <option value="West Bengal">West Bengal</option>
+              <option value="Jammu &amp; Kashmir">Jammu &amp; Kashmir</option>
+              <option value="Ladakh">Ladakh</option>
+              <option value="Puducherry">Puducherry</option>
+              <option value="Chandigarh">Chandigarh</option>
+              <option value="Andaman &amp; Nicobar">Andaman &amp; Nicobar</option>
+              <option value="Dadra &amp; Nagar Haveli and Daman &amp; Diu">Dadra &amp; NH and Daman &amp; Diu</option>
+              <option value="Lakshadweep">Lakshadweep</option>
+              <option value="Other">Other</option>
+            </select>
+            <div class="w-error">Please select your state</div>
+          </div>
+          <div class="w-form-group" id="wg-city">
+            <label>City <span class="w-req">*</span></label>
+            <input type="text" id="wCity" placeholder="Your city" required>
+            <div class="w-error">Please enter your city</div>
+          </div>
+          <button type="submit" class="w-submit" id="wSubmitBtn">Confirm my spot &#8594;</button>
+        </form>
+      </div>
+      <!-- Step 3: Confirmation -->
+      <div id="wStep3" style="display:none">
+        <div class="w-confirm">
+          <div class="w-check">&#127881;</div>
+          <p class="w-done-text">You're in!</p>
+          <p class="w-done-sub">We'll reach out on WhatsApp/call with your webinar details shortly.</p>
+          <button class="w-done-btn" id="wDoneBtn">Done</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -590,6 +845,179 @@ ul{list-style:none}
 
   /* ── INIT ─────────────────────────────── */
   renderCards();
+
+  /* ══════════════════════════════════════════
+     WEBINAR INTEREST POPUP
+     ══════════════════════════════════════════ */
+  (function(){
+    var POPUP_SHOWN_KEY = "wPopupShown";
+    var SESSION_KEY = "wPopupSession";
+
+    var popup = document.getElementById("webinarPopup");
+    var step1 = document.getElementById("wStep1");
+    var step2 = document.getElementById("wStep2");
+    var step3 = document.getElementById("wStep3");
+    var btnYes = document.getElementById("wBtnYes");
+    var btnNo = document.getElementById("wBtnNo");
+    var btnClose = document.getElementById("wPopupClose");
+    var btnDone = document.getElementById("wDoneBtn");
+    var form = document.getElementById("wForm");
+    var submitBtn = document.getElementById("wSubmitBtn");
+
+    // Check if already answered this session
+    if (sessionStorage.getItem(POPUP_SHOWN_KEY) === "1") {
+      return;
+    }
+
+    // Show popup after 4 seconds
+    setTimeout(function() {
+      popup.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }, 4000);
+
+    // Close / dismiss helpers
+    function closePopup() {
+      popup.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+
+    function markShown() {
+      sessionStorage.setItem(POPUP_SHOWN_KEY, "1");
+    }
+
+    // Step 1 — No
+    btnNo.addEventListener("click", function() {
+      markShown();
+      closePopup();
+    });
+
+    // Close button (same as "No")
+    btnClose.addEventListener("click", function() {
+      markShown();
+      closePopup();
+    });
+
+    // Step 1 — Yes → show Step 2
+    btnYes.addEventListener("click", function() {
+      step1.style.display = "none";
+      step2.style.display = "block";
+    });
+
+    // Validation helpers
+    function showError(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.add("has-error");
+    }
+    function clearError(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.remove("has-error");
+    }
+    function clearAllErrors() {
+      ["wg-name","wg-phone","wg-age","wg-state","wg-city"].forEach(clearError);
+    }
+
+    // Real-time error clearing
+    ["wName","wPhone","wAge","wState","wCity"].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) {
+        el.addEventListener("input", function(){ clearError("wg-" + id.replace("w","").toLowerCase()); });
+      }
+    });
+
+    // Form submit
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      clearAllErrors();
+
+      var name = document.getElementById("wName").value.trim();
+      var phone = document.getElementById("wPhone").value.trim();
+      var age = document.getElementById("wAge").value.trim();
+      var state = document.getElementById("wState").value;
+      var city = document.getElementById("wCity").value.trim();
+      var countryCode = document.getElementById("wCountryCode").value;
+
+      var hasError = false;
+
+      if (name.length < 2) { showError("wg-name"); hasError = true; }
+      if (!/^\d{7,15}$/.test(phone)) { showError("wg-phone"); hasError = true; }
+      var ageNum = parseInt(age, 10);
+      if (isNaN(ageNum) || ageNum < 13 || ageNum > 80) { showError("wg-age"); hasError = true; }
+      if (!state) { showError("wg-state"); hasError = true; }
+      if (city.length < 1) { showError("wg-city"); hasError = true; }
+
+      if (hasError) return;
+
+      // Disable submit + spinner
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="w-spinner"></span> Confirming...';
+
+      // Build data
+      var now = new Date();
+      var dateStr = ("0" + now.getDate()).slice(-2) + "-" + ("0" + (now.getMonth()+1)).slice(-2) + "-" + now.getFullYear();
+      var timeStr = ("0" + now.getHours()).slice(-2) + ":" + ("0" + now.getMinutes()).slice(-2);
+      var fullPhone = countryCode + phone;
+
+      var formData = {
+        date: dateStr,
+        time: timeStr,
+        name: name,
+        phone: fullPhone,
+        age: ageNum,
+        state: state,
+        city: city
+      };
+
+      // Submit to Google Sheets via Apps Script web app
+      // Replace the URL below with your deployed Google Apps Script web app URL
+      var SHEETS_ENDPOINT = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+
+      fetch(SHEETS_ENDPOINT, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      }).then(function() {
+        // Success — show Step 3
+        step2.style.display = "none";
+        step3.style.display = "block";
+        markShown();
+
+        // Auto-close after 4 seconds
+        setTimeout(function() {
+          closePopup();
+        }, 4000);
+      }).catch(function() {
+        // Even if network fails, show confirmation
+        step2.style.display = "none";
+        step3.style.display = "block";
+        markShown();
+        setTimeout(function() {
+          closePopup();
+        }, 4000);
+      });
+    });
+
+    // Done button
+    btnDone.addEventListener("click", function() {
+      closePopup();
+    });
+
+    // Escape key
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "Escape" && popup.classList.contains("active")) {
+        markShown();
+        closePopup();
+      }
+    });
+
+    // Click outside popup
+    popup.addEventListener("click", function(e) {
+      if (e.target === popup) {
+        markShown();
+        closePopup();
+      }
+    });
+  })();
 })();
 </script>
 </body>
