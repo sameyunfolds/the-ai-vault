@@ -48,48 +48,13 @@ function doGet(e) {
 }
 
 function getOrCreateSheet() {
-  var SPREADSHEET_NAME = "Samey.unfolds — Webinar Leads";
-  var SHEET_NAME = "Leads";
+  var SPREADSHEET_ID = "1JhnKXYocLFI333fyrYi4Z71Vk5Q7tA9CDn271GPbeFo";
+  var SHEET_NAME = "Sheet1";
   
-  // Try to find existing spreadsheet
-  var files = DriveApp.getFilesByName(SPREADSHEET_NAME);
-  var spreadsheet;
-  
-  if (files.hasNext()) {
-    spreadsheet = SpreadsheetApp.open(files.next());
-  } else {
-    // Create new spreadsheet with headers
-    spreadsheet = SpreadsheetApp.create(SPREADSHEET_NAME);
-    var sheet = spreadsheet.getActiveSheet();
-    sheet.setName(SHEET_NAME);
-    
-    // Add headers
-    sheet.appendRow(["Date", "Time", "Full Name", "Phone Number", "Age", "Country", "State", "City"]);
-    
-    // Format header row
-    var headerRange = sheet.getRange(1, 1, 1, 8);
-    headerRange.setFontWeight("bold");
-    headerRange.setBackground("#F5C518");
-    headerRange.setFontColor("#000000");
-    
-    // Set column widths
-    sheet.setColumnWidth(1, 100);  // Date
-    sheet.setColumnWidth(2, 80);   // Time
-    sheet.setColumnWidth(3, 180);  // Name
-    sheet.setColumnWidth(4, 150);  // Phone
-    sheet.setColumnWidth(5, 60);   // Age
-    sheet.setColumnWidth(6, 130);  // Country
-    sheet.setColumnWidth(7, 140);  // State
-    sheet.setColumnWidth(8, 140);  // City
-    
-    // Freeze header row
-    sheet.setFrozenRows(1);
-  }
-  
+  var spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
   var sheet = spreadsheet.getSheetByName(SHEET_NAME);
   if (!sheet) {
     sheet = spreadsheet.getActiveSheet();
-    sheet.setName(SHEET_NAME);
   }
   
   return sheet;
