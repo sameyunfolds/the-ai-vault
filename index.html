@@ -826,11 +826,9 @@ ul{list-style:none}
       return;
     }
 
-    // Show popup after 4 seconds
-    setTimeout(function() {
-      popup.classList.add("active");
-      document.body.style.overflow = "hidden";
-    }, 4000);
+    // Show popup immediately on page load
+    popup.classList.add("active");
+    document.body.style.overflow = "hidden";
 
     // Close / dismiss helpers
     function closePopup() {
