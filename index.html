@@ -358,6 +358,26 @@ ul{list-style:none}
 }
 .w-btn-no:hover{border-color:var(--muted);color:#FFF}
 
+/* Step 1 — Learn List */
+.w-learn-label{
+  font-family:var(--font-heading);font-size:13px;font-weight:600;
+  color:rgba(255,255,255,0.7);margin-bottom:10px;letter-spacing:0.01em;
+}
+.w-learn-label span{color:var(--yellow)}
+.w-learn-list{
+  margin:0 0 14px 0;padding:0 0 0 20px;
+}
+.w-learn-list li{
+  font-size:14px;font-weight:500;color:#FFF;
+  padding:4px 0;line-height:1.4;
+  list-style:none;position:relative;padding-left:22px;
+}
+.w-learn-list li::before{
+  content:"";position:absolute;left:0;top:11px;
+  width:8px;height:8px;border-radius:50%;
+  background:var(--yellow);
+}
+
 /* Step 2 — Form */
 .w-form-group{margin-bottom:14px}
 .w-form-group label{
@@ -558,8 +578,17 @@ ul{list-style:none}
     <div class="w-popup-body" id="wPopupBody">
       <!-- Step 1: Yes / No -->
       <div id="wStep1">
-        <p class="w-heading">We're having a <span>free AI webinar</span>.</p>
-        <p class="w-sub">Interested? Leave your details and we'll invite you.</p>
+        <p class="w-heading">We are having a <span>free webinar</span>.</p>
+        <p class="w-sub">Join the webinar — limited slots left.</p>
+        <p class="w-learn-label">Here's what you'll learn for <span>free</span></p>
+        <ul class="w-learn-list">
+          <li>Creating AI agents</li>
+          <li>AI websites</li>
+          <li>AI calling agents</li>
+          <li>AI UGC ads</li>
+          <li>AI influencer</li>
+        </ul>
+        <p class="w-sub" style="margin-bottom:20px">Totally free — we are having a free AI webinar.</p>
         <div class="w-btn-row">
           <button class="w-btn w-btn-yes" id="wBtnYes">Yes, I'm interested</button>
           <button class="w-btn w-btn-no" id="wBtnNo">No, maybe later</button>
