@@ -1378,12 +1378,36 @@ ul{list-style:none}
       card.classList.add("unlocked");
     }
 
-    // Open popup on unlock click
+    // Copy link automatically + open popup on unlock click
+    function copyToClipboardFallback() {
+      try {
+        var ta = document.createElement("textarea");
+        ta.value = shareText + "\n" + shareUrl;
+        ta.style.cssText = "position:fixed;opacity:0;top:0;left:0";
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        var ok = document.execCommand("copy");
+        document.body.removeChild(ta);
+        return ok;
+      } catch(e) { return false; }
+    }
+
+    function copyShareLink() {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareText + "\n" + shareUrl).catch(function(){ copyToClipboardFallback(); });
+      } else {
+        copyToClipboardFallback();
+      }
+    }
+
+    // Unlock Now → copy link + show share popup
     unlockBtn.addEventListener("click", function() {
+      copyShareLink();
       openSharePopup();
     });
 
-    // Share via Web Share API
+    // Share via Web Share API (mobile native share)
     spShareBtn.addEventListener("click", function() {
       if (navigator.share) {
         navigator.share({
@@ -1393,45 +1417,33 @@ ul{list-style:none}
         }).then(function() {
           unlockCheatsheet();
           closeSharePopup();
-        }).catch(function(err) {
-          // User cancelled or error — do nothing
-        });
+        }).catch(function() {});
       } else {
-        // Fallback: copy link
-        copyLink();
+        unlockAndClose();
       }
     });
 
-    function copyLink() {
-      var textarea = document.createElement("textarea");
-      textarea.value = shareText + "\n" + shareUrl;
-      textarea.style.position = "fixed";
-      textarea.style.opacity = "0";
-      document.body.appendChild(textarea);
-      textarea.select();
-      try {
-        document.execCommand("copy");
-        spCopyBtn.textContent = "&#10003; Copied!";
-        unlockCheatsheet();
-        setTimeout(function() {
-          closeSharePopup();
-        }, 800);
-      } catch(e) {}
-      document.body.removeChild(textarea);
-    }
-
+    // Copy link button
     spCopyBtn.addEventListener("click", function() {
-      copyLink();
+      copyShareLink();
+      spCopyBtn.textContent = "✓ Copied!";
+      unlockCheatsheet();
+      setTimeout(function() { closeSharePopup(); }, 800);
     });
 
-    // Close handlers
-    spClose.addEventListener("click", closeSharePopup);
+    // Close share popup — unlock (link was already copied on open)
+    function unlockAndClose() {
+      unlockCheatsheet();
+      closeSharePopup();
+    }
+
+    spClose.addEventListener("click", unlockAndClose);
     spOverlay.addEventListener("click", function(e) {
-      if (e.target === spOverlay) closeSharePopup();
+      if (e.target === spOverlay) unlockAndClose();
     });
     document.addEventListener("keydown", function(e) {
       if (e.key === "Escape" && spOverlay.classList.contains("active")) {
-        closeSharePopup();
+        unlockAndClose();
       }
     });
   })();
