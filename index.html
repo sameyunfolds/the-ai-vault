@@ -645,6 +645,10 @@ ul{list-style:none}
             <input type="text" id="wCity" placeholder="Your city" required>
             <div class="w-error">Please enter your city</div>
           </div>
+          <div class="w-form-group" id="wg-instagram">
+            <label>Instagram Handle <span style="color:var(--muted);font-weight:400;font-size:11px">(optional)</span></label>
+            <input type="text" id="wInstagram" placeholder="@yourhandle">
+          </div>
           <button type="submit" class="w-submit" id="wSubmitBtn">Confirm my spot &#8594;</button>
         </form>
       </div>
@@ -1038,6 +1042,7 @@ ul{list-style:none}
       var state = document.getElementById("wState").value;
       var city = document.getElementById("wCity").value.trim();
       var countryCode = document.getElementById("wCountryCode").value;
+      var instagram = document.getElementById("wInstagram").value.trim();
 
       var hasError = false;
 
@@ -1069,7 +1074,8 @@ ul{list-style:none}
         age: ageNum,
         country: country,
         state: state,
-        city: city
+        city: city,
+        instagram: instagram || "",
       };
 
       // Submit to Google Sheets via Apps Script web app
