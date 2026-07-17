@@ -446,6 +446,155 @@ ul{list-style:none}
 @keyframes wspin{to{transform:rotate(360deg)}}
 
 /* ══════════════════════════════════════════
+   SHARE TO UNLOCK SECTION
+   ══════════════════════════════════════════ */
+.share-section{padding:60px 0}
+.share-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:48px 40px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.share-card::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,var(--yellow),#FF8C00,var(--yellow));
+}
+.share-locked .share-icon{
+  width:56px;height:56px;border-radius:50%;
+  background:rgba(245,197,24,0.12);color:var(--yellow);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;margin:0 auto 18px;
+}
+.share-card h2{
+  font-family:var(--font-heading);font-size:clamp(24px,3.5vw,32px);
+  font-weight:700;letter-spacing:-0.03em;line-height:1.15;
+  margin-bottom:12px;color:#FFF;
+}
+.share-card h2 span{color:var(--yellow)}
+.share-card .share-sub{
+  font-size:15px;color:var(--muted);max-width:500px;
+  margin:0 auto 28px;line-height:1.6;
+}
+.share-list{
+  text-align:left;max-width:520px;margin:0 auto 32px;
+  padding:0;
+}
+.share-list li{
+  list-style:none;padding:10px 0 10px 32px;
+  font-size:14px;color:#FFF;line-height:1.5;
+  position:relative;border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.share-list li:last-child{border-bottom:none}
+.share-list li::before{
+  content:"✓";position:absolute;left:0;top:10px;
+  width:22px;height:22px;border-radius:50%;
+  background:rgba(245,197,24,0.12);color:var(--yellow);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;line-height:22px;text-align:center;
+}
+.share-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:16px 36px;border-radius:var(--radius-btn);
+  background:var(--yellow);color:#000;border:none;
+  font-family:var(--font-heading);font-size:16px;font-weight:700;
+  cursor:pointer;transition:var(--transition);
+}
+.share-btn:hover{background:#FFD629;transform:translateY(-2px)}
+.share-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+
+/* Unlocked state */
+.share-unlocked{display:none}
+.share-card.unlocked .share-locked{display:none}
+.share-card.unlocked .share-unlocked{display:block}
+.share-unlocked .unlock-check{
+  width:60px;height:60px;border-radius:50%;
+  background:rgba(245,197,24,0.12);color:var(--yellow);
+  display:flex;align-items:center;justify-content:center;
+  font-size:30px;margin:0 auto 18px;
+}
+.share-unlocked .cheatsheet-box{
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);border-radius:14px;
+  padding:24px 28px;margin:24px auto 0;max-width:520px;text-align:left;
+}
+.share-unlocked .cheatsheet-box h4{
+  font-family:var(--font-heading);font-size:14px;font-weight:700;
+  color:var(--yellow);margin-bottom:12px;text-transform:uppercase;
+  letter-spacing:0.04em;
+}
+.share-unlocked .cheatsheet-box p{
+  font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:8px;
+}
+.share-unlocked .cheatsheet-box p strong{color:#FFF}
+
+/* Share popup overlay */
+.share-popup-overlay{
+  position:fixed;inset:0;z-index:400;
+  background:rgba(0,0,0,0.88);
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;opacity:0;pointer-events:none;
+  transition:opacity 0.25s ease;
+}
+.share-popup-overlay.active{opacity:1;pointer-events:auto}
+.share-popup{
+  background:var(--card);border:1px solid var(--yellow);
+  border-radius:20px;width:100%;max-width:440px;
+  overflow:hidden;text-align:center;
+  transform:translateY(20px) scale(0.97);
+  transition:transform 0.3s ease;
+}
+.share-popup-overlay.active .share-popup{transform:translateY(0) scale(1)}
+.share-popup-head{
+  background:var(--yellow);padding:16px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.share-popup-head .sp-title{
+  font-family:var(--font-heading);font-size:14px;font-weight:700;color:#000;
+}
+.share-popup-head .sp-close{
+  width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,0.1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;color:#000;transition:var(--transition);cursor:pointer;border:none;
+}
+.share-popup-head .sp-close:hover{background:rgba(0,0,0,0.2)}
+.share-popup-body{padding:28px 24px}
+.share-popup-body .sp-icon{font-size:40px;margin-bottom:14px}
+.share-popup-body h3{
+  font-family:var(--font-heading);font-size:18px;font-weight:700;
+  color:#FFF;margin-bottom:8px;
+}
+.share-popup-body .sp-desc{
+  font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5;
+}
+.share-popup-body .sp-message-box{
+  background:rgba(255,255,255,0.04);border:1px solid var(--border);
+  border-radius:12px;padding:12px 16px;margin-bottom:20px;
+  font-size:13px;color:#FFF;line-height:1.5;text-align:left;
+}
+.share-popup-body .sp-message-box .sp-label{
+  font-size:10px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:0.06em;margin-bottom:6px;font-weight:600;
+}
+.share-popup-body .sp-message-box .sp-text{font-size:13px;color:#FFF;}
+.sp-share-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:14px;border-radius:var(--radius-btn);
+  background:var(--yellow);color:#000;border:none;
+  font-family:var(--font-heading);font-size:15px;font-weight:700;
+  cursor:pointer;transition:var(--transition);
+}
+.sp-share-btn:hover{background:#FFD629;transform:translateY(-1px)}
+.sp-copy-link{
+  display:inline-block;margin-top:12px;
+  font-size:13px;color:var(--muted);cursor:pointer;
+  text-decoration:underline;border:none;background:none;
+  font-family:var(--font-body);transition:var(--transition);
+}
+.sp-copy-link:hover{color:var(--yellow)}
+
+@media(max-width:680px){
+  .share-card{padding:36px 24px}
+  .share-section{padding:40px 0}
+}
    FOOTER
    ══════════════════════════════════════════ */
 .footer{
@@ -531,6 +680,43 @@ ul{list-style:none}
   </div>
 </section>
 
+<!-- ═══════════════════════════════════════
+     SHARE TO UNLOCK CHEATSHEET
+     ══════════════════════════════════════─ -->
+<section class="share-section" id="shareSection" aria-label="Unlock cheatsheet">
+  <div class="container">
+    <div class="share-card" id="shareCard">
+      <!-- Locked state -->
+      <div class="share-locked" id="shareLocked">
+        <div class="share-icon" aria-hidden="true">&#128274;</div>
+        <h2>Unlock your <span>AI Creator's Cheatsheet</span> now!</h2>
+        <p class="share-sub">Share this vault with a friend to unlock a free cheatsheet — packed with the exact tools, templates, and strategies we use to grow.</p>
+        <ul class="share-list">
+          <li><strong>7 free AI tools</strong> that do 90% of the work</li>
+          <li>The exact <strong>content pipeline</strong> from idea to published</li>
+          <li>When to upgrade to paid tools (and when <strong>NOT</strong> to)</li>
+          <li><strong>8 proven secrets</strong> to grow your content faster</li>
+          <li>A <strong>30-day battle plan</strong> to build your content engine</li>
+        </ul>
+        <button class="share-btn" id="shareUnlockBtn">&#128274; Unlock Now</button>
+      </div>
+      <!-- Unlocked state -->
+      <div class="share-unlocked" id="shareUnlocked">
+        <div class="unlock-check" aria-hidden="true">&#127881;</div>
+        <h2>You unlocked it! <span>&#128293;</span></h2>
+        <p class="share-sub">Your <strong>AI Creator's Cheatsheet</strong> is ready. Save it, use it, share it.</p>
+        <div class="cheatsheet-box">
+          <h4>&#128196; AI Creator's Cheatsheet</h4>
+          <p><strong>7 free AI tools that do 90% of the work</strong><br>Copy.ai (copywriting), Canva AI (design), ElevenLabs (voice), Descript (editing), Perplexity (research), ChatGPT (planning), Runway (video).</p>
+          <p><strong>The exact content pipeline: Idea &#8594; Published</strong><br>Research &#8594; Script &#8594; Record &#8594; Edit &#8594; Repurpose &#8594; Schedule. Each step has a free AI tool that cuts the time in half.</p>
+          <p><strong>When to upgrade (and when NOT to)</strong><br>Free tiers handle 90% of what you need. Upgrade only when: (1) you're posting 5+ times/week, (2) you need custom branding, (3) collaboration features save you more than the subscription costs.</p>
+          <p><strong>8 secrets to grow faster</strong><br>Hook in 3s, pattern interrupt every 15s, one takeaway per piece, remix top content, post consistently, engage before posting, test different formats, track what works and double down.</p>
+          <p><strong>30-day battle plan</strong><br>Week 1: Set up tools &amp; templates. Week 2: Produce 10 pieces of content. Week 3: Test &amp; optimize. Week 4: Scale what works.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 <!-- ═══════════════════════════════════════
      VIDEO LINK VAULT
      ══════════════════════════════════════─ -->
@@ -1124,6 +1310,128 @@ ul{list-style:none}
       if (e.target === popup) {
         markShown();
         closePopup();
+      }
+    });
+  })();
+
+  /* ══════════════════════════════════════════
+     SHARE TO UNLOCK CHEATSHEET
+     ══════════════════════════════════════════ */
+  (function(){
+    var LS_KEY = "vault_cheatsheet_unlocked";
+    var card = document.getElementById("shareCard");
+    var locked = document.getElementById("shareLocked");
+    var unlocked = document.getElementById("shareUnlocked");
+    var unlockBtn = document.getElementById("shareUnlockBtn");
+    var shareUrl = "https://sameyunfolds.github.io/the-ai-vault/";
+    var shareText = "Hey! Check out The AI Vault — it has tons of free AI tools and resources. 🚀";
+
+    // Check if already unlocked
+    if (localStorage.getItem(LS_KEY) === "1") {
+      card.classList.add("unlocked");
+    }
+
+    // Create share popup
+    var popupOverlay = document.createElement("div");
+    popupOverlay.className = "share-popup-overlay";
+    popupOverlay.id = "sharePopupOverlay";
+    popupOverlay.setAttribute("role", "dialog");
+    popupOverlay.setAttribute("aria-modal", "true");
+    popupOverlay.setAttribute("aria-label", "Share to unlock");
+    popupOverlay.innerHTML =
+      '<div class="share-popup">'
+        + '<div class="share-popup-head">'
+          + '<span class="sp-title">Share to Unlock</span>'
+          + '<button class="sp-close" id="spClose" aria-label="Close popup">&#10005;</button>'
+        + '</div>'
+        + '<div class="share-popup-body">'
+          + '<div class="sp-icon">&#128640;</div>'
+          + '<h3>Share with a friend</h3>'
+          + '<p class="sp-desc">Send this to someone who\'d love it. They get value, you get the cheatsheet.</p>'
+          + '<div class="sp-message-box">'
+            + '<div class="sp-label">Your message</div>'
+            + '<div class="sp-text" id="spShareText">' + shareText + '</div>'
+          + '</div>'
+          + '<button class="sp-share-btn" id="spShareBtn">&#128228; Share Now</button>'
+          + '<button class="sp-copy-link" id="spCopyBtn">&#128203; Copy link instead</button>'
+        + '</div>'
+      + '</div>';
+    document.body.appendChild(popupOverlay);
+
+    var spOverlay = popupOverlay;
+    var spClose = document.getElementById("spClose");
+    var spShareBtn = document.getElementById("spShareBtn");
+    var spCopyBtn = document.getElementById("spCopyBtn");
+
+    function openSharePopup() {
+      spOverlay.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeSharePopup() {
+      spOverlay.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+
+    function unlockCheatsheet() {
+      localStorage.setItem(LS_KEY, "1");
+      card.classList.add("unlocked");
+    }
+
+    // Open popup on unlock click
+    unlockBtn.addEventListener("click", function() {
+      openSharePopup();
+    });
+
+    // Share via Web Share API
+    spShareBtn.addEventListener("click", function() {
+      if (navigator.share) {
+        navigator.share({
+          title: "The AI Vault",
+          text: shareText,
+          url: shareUrl
+        }).then(function() {
+          unlockCheatsheet();
+          closeSharePopup();
+        }).catch(function(err) {
+          // User cancelled or error — do nothing
+        });
+      } else {
+        // Fallback: copy link
+        copyLink();
+      }
+    });
+
+    function copyLink() {
+      var textarea = document.createElement("textarea");
+      textarea.value = shareText + "\n" + shareUrl;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand("copy");
+        spCopyBtn.textContent = "&#10003; Copied!";
+        unlockCheatsheet();
+        setTimeout(function() {
+          closeSharePopup();
+        }, 800);
+      } catch(e) {}
+      document.body.removeChild(textarea);
+    }
+
+    spCopyBtn.addEventListener("click", function() {
+      copyLink();
+    });
+
+    // Close handlers
+    spClose.addEventListener("click", closeSharePopup);
+    spOverlay.addEventListener("click", function(e) {
+      if (e.target === spOverlay) closeSharePopup();
+    });
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "Escape" && spOverlay.classList.contains("active")) {
+        closeSharePopup();
       }
     });
   })();
