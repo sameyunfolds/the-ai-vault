@@ -646,8 +646,9 @@ ul{list-style:none}
             <div class="w-error">Please enter your city</div>
           </div>
           <div class="w-form-group" id="wg-instagram">
-            <label>Instagram Handle <span style="color:var(--muted);font-weight:400;font-size:11px">(optional)</span></label>
-            <input type="text" id="wInstagram" placeholder="@yourhandle">
+            <label>Instagram Handle <span class="w-req">*</span></label>
+            <input type="text" id="wInstagram" placeholder="@yourhandle" required>
+            <div class="w-error">Please enter your Instagram handle</div>
           </div>
           <button type="submit" class="w-submit" id="wSubmitBtn">Confirm my spot &#8594;</button>
         </form>
@@ -901,11 +902,11 @@ ul{list-style:none}
       if (el) el.classList.remove("has-error");
     }
     function clearAllErrors() {
-      ["wg-name","wg-phone","wg-age","wg-state","wg-city"].forEach(clearError);
+      ["wg-name","wg-phone","wg-age","wg-state","wg-city","wg-instagram"].forEach(clearError);
     }
 
     // Real-time error clearing
-    ["wName","wPhone","wAge","wCountry","wState","wCity"].forEach(function(id) {
+    ["wName","wPhone","wAge","wCountry","wState","wCity","wInstagram"].forEach(function(id) {
       var el = document.getElementById(id);
       if (el) {
         el.addEventListener("input", function(){ clearError("wg-" + id.replace("w","").toLowerCase()); });
@@ -1053,6 +1054,7 @@ ul{list-style:none}
       if (!country) { showError("wg-country"); hasError = true; }
       if (!state) { showError("wg-state"); hasError = true; }
       if (city.length < 1) { showError("wg-city"); hasError = true; }
+      if (instagram.length < 1) { showError("wg-instagram"); hasError = true; }
 
       if (hasError) return;
 
