@@ -1431,19 +1431,14 @@ ul{list-style:none}
       setTimeout(function() { closeSharePopup(); }, 800);
     });
 
-    // Close share popup — unlock (link was already copied on open)
-    function unlockAndClose() {
-      unlockCheatsheet();
-      closeSharePopup();
-    }
-
-    spClose.addEventListener("click", unlockAndClose);
+    // Close popup (does NOT unlock — must share or copy)
+    spClose.addEventListener("click", closeSharePopup);
     spOverlay.addEventListener("click", function(e) {
-      if (e.target === spOverlay) unlockAndClose();
+      if (e.target === spOverlay) closeSharePopup();
     });
     document.addEventListener("keydown", function(e) {
       if (e.key === "Escape" && spOverlay.classList.contains("active")) {
-        unlockAndClose();
+        closeSharePopup();
       }
     });
   })();
