@@ -438,12 +438,12 @@ ul{list-style:none}
 
 /* ══════════════════════════════════════════
 /* ══════════════════════════════════════════
-   WEBINAR INTEREST POPUP — Styled Card
+/* ══════════════════════════════════════════
+   WEBINAR INTEREST POPUP — Clean Dark Card
    ══════════════════════════════════════════ */
 .w-popup-overlay{
   position:fixed;inset:0;z-index:300;
-  background:rgba(10,11,13,0.7);
-  backdrop-filter:blur(4px);
+  background:rgba(10,11,13,0.8);
   display:flex;align-items:center;justify-content:center;
   padding:20px;
   opacity:0;pointer-events:none;
@@ -452,115 +452,73 @@ ul{list-style:none}
 .w-popup-overlay.active{opacity:1;pointer-events:auto}
 
 .w-popup{
-  --card-white:hsl(0,0%,100%);
-  --card-dark:hsl(240,15%,9%);
-  --card-paragraph:hsl(0,0%,83%);
-  --card-line:hsl(240,9%,17%);
-  --card-blue:#0052ff;
-
   position:relative;
   display:flex;flex-direction:column;
   padding:1.5rem;
   width:22rem;max-width:100%;
-  background-color:#0a0b0d;
-  background-image:
-    radial-gradient(at 88% 40%,#0a0b0d 0px,transparent 85%),
-    radial-gradient(at 49% 30%,#0a0b0d 0px,transparent 85%),
-    radial-gradient(at 14% 26%,#0a0b0d 0px,transparent 85%),
-    radial-gradient(at 0% 64%,#0052ff 0px,transparent 85%),
-    radial-gradient(at 41% 94%,#3385ff 0px,transparent 85%),
-    radial-gradient(at 100% 99%,#1a6bff 0px,transparent 85%);
+  background:#0a0b0d;
   border-radius:1rem;
-  box-shadow:0px -16px 24px 0px rgba(0,0,0,0.5) inset;
+  border:1px solid #1e2329;
+  box-shadow:0 0 30px rgba(0,82,255,0.15),0 0 0 1px rgba(0,82,255,0.1);
   transform:translateY(20px) scale(0.96);
   transition:transform 0.35s ease;
 }
 .w-popup-overlay.active .w-popup{transform:translateY(0) scale(1)}
 
-/* Animated border */
-.w-popup .w-border{
-  overflow:hidden;pointer-events:none;
-  position:absolute;z-index:-10;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  width:calc(100% + 3px);
-  height:calc(100% + 3px);
-  background-image:linear-gradient(0deg,#1e2329 -50%,#0a0b0d 100%);
-  border-radius:1rem;
-}
-.w-popup .w-border::before{
-  content:"";pointer-events:none;
-  position:fixed;z-index:200;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%) rotate(0deg);
-  transform-origin:left;
-  width:200%;height:10rem;
-  background-image:linear-gradient(0deg,
-    hsla(0,0%,100%,0) 0%,
-    #0052ff 40%,
-    #0052ff 60%,
-    hsla(0,0%,40%,0) 100%
-  );
-  animation:wBorderRotate 6s linear infinite;
-}
-@keyframes wBorderRotate{to{transform:translate(-50%,-50%) rotate(360deg)}}
-
 /* Close button */
 .w-popup .w-close{
   position:absolute;top:12px;right:12px;z-index:10;
   width:28px;height:28px;border-radius:9999px;
-  background:rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.06);
   display:flex;align-items:center;justify-content:center;
-  font-size:14px;color:rgba(255,255,255,0.6);
+  font-size:14px;color:rgba(255,255,255,0.4);
   transition:var(--transition);cursor:pointer;border:none;
 }
-.w-popup .w-close:hover{background:rgba(255,255,255,0.15);color:#fff}
+.w-popup .w-close:hover{background:rgba(255,255,255,0.12);color:#fff}
 
 /* Step 1: Yes/No */
 .w-popup-body{padding:0.25rem 0 0}
 .w-popup-body .w-heading{
   font-family:var(--font-display);
   font-size:1.1rem;font-weight:500;
-  color:var(--card-white);margin-bottom:0.25rem;
+  color:#ffffff;margin-bottom:0.25rem;
   line-height:1.3;letter-spacing:-0.3px;
 }
-.w-popup-body .w-heading span{color:var(--card-blue)}
+.w-popup-body .w-heading span{color:#0052ff}
 .w-popup-body .w-sub{
   margin-top:0.25rem;width:80%;
-  font-size:0.55rem;color:var(--card-paragraph);line-height:1.5;
+  font-size:0.55rem;color:#7c828a;line-height:1.5;
   margin-bottom:0.75rem;
 }
 .w-popup-body .w-line{
   width:100%;height:0.1rem;
-  background-color:var(--card-line);border:none;
+  background-color:#1e2329;border:none;
   margin:0.75rem 0;
 }
 
 /* Learning list with check icons */
 .w-learn-label{
   font-family:var(--font-body);font-size:0.6rem;font-weight:500;
-  color:var(--card-paragraph);margin-bottom:0.5rem;
+  color:#7c828a;margin-bottom:0.5rem;
 }
-.w-learn-label span{color:var(--card-blue)}
+.w-learn-label span{color:#0052ff}
 .w-learn-list{
   display:flex;flex-direction:column;gap:0.4rem;
   margin:0 0 0.75rem 0;padding:0;
 }
 .w-learn-list li{
   display:flex;align-items:center;gap:0.5rem;
-  font-size:0.65rem;color:var(--card-white);line-height:1.4;
+  font-size:0.65rem;color:#eaecef;line-height:1.4;
   list-style:none;padding:0;
 }
-.w-learn-list li::before{
-  display:none;
-}
+.w-learn-list li::before{display:none}
 .w-learn-list li .w-check-icon{
   display:flex;justify-content:center;align-items:center;
   width:1rem;height:1rem;flex-shrink:0;
-  background-color:var(--card-blue);border-radius:50%;
+  background-color:#0052ff;border-radius:50%;
 }
 .w-learn-list li .w-check-icon svg{
-  width:0.7rem;height:0.7rem;fill:var(--card-dark);
+  width:0.7rem;height:0.7rem;fill:#0a0b0d;
 }
 
 /* Buttons */
@@ -574,83 +532,62 @@ ul{list-style:none}
   line-height:1.15;
 }
 .w-btn-yes{
-  background-image:linear-gradient(0deg,
-    #003ecc 0%,
-    #1a6bff 100%
-  );
-  color:var(--card-white);
-  box-shadow:inset 0 -2px 25px -4px var(--card-white);
+  background:#0052ff;color:#ffffff;
 }
-.w-btn-yes:hover{transform:translateY(-1px);
-  background-image:linear-gradient(0deg,
-    #0030a3 0%,
-    #0052ff 100%
-  );
-}
+.w-btn-yes:hover{background:#003ecc;transform:translateY(-1px)}
 .w-btn-no{
-  background:transparent;color:rgba(255,255,255,0.5);
-  border:1px solid var(--card-line);
+  background:transparent;color:rgba(255,255,255,0.4);
+  border:1px solid #1e2329;
 }
-.w-btn-no:hover{border-color:rgba(255,255,255,0.3);color:var(--card-white)}
+.w-btn-no:hover{border-color:rgba(255,255,255,0.2);color:#eaecef}
 
 /* Step 2: Form */
 .w-form-group{margin-bottom:0.75rem}
 .w-form-group label{
-  display:block;font-size:0.55rem;color:var(--card-paragraph);
+  display:block;font-size:0.55rem;color:#7c828a;
   font-weight:500;margin-bottom:0.25rem;
   font-family:var(--font-body);letter-spacing:0.02em;
 }
-.w-form-group label .w-req{color:hsl(0,80%,55%)}
+.w-form-group label .w-req{color:#cf202f}
 .w-form-group input,.w-form-group select{
   width:100%;padding:0.5rem 0.65rem;
   border-radius:0.5rem;
-  border:1px solid var(--card-line);
-  background:hsla(240,15%,12%,1);
-  color:var(--card-white);
+  border:1px solid #1e2329;
+  background:#0a0b0d;
+  color:#eaecef;
   font-size:0.65rem;font-family:var(--font-body);
   transition:var(--transition);outline:none;
 }
 .w-form-group input:focus,.w-form-group select:focus{
-  border-color:var(--card-blue);
-  background:hsla(240,15%,15%,1);
+  border-color:#0052ff;
+  box-shadow:0 0 0 2px rgba(0,82,255,0.15);
 }
 .w-form-group select{appearance:auto;cursor:pointer}
 .w-form-group .w-error{
-  font-size:0.55rem;color:hsl(0,80%,55%);margin-top:0.2rem;display:none;
+  font-size:0.55rem;color:#cf202f;margin-top:0.2rem;display:none;
 }
 .w-form-group.has-error .w-error{display:block}
-.w-form-group.has-error input,.w-form-group.has-error select{border-color:hsl(0,80%,55%)}
+.w-form-group.has-error input,.w-form-group.has-error select{border-color:#cf202f}
 .w-phone-row{display:flex;gap:0.4rem}
 .w-phone-row select{width:4.5rem;flex-shrink:0}
 .w-phone-row input{flex:1}
 .w-submit{
   cursor:pointer;padding:0.55rem;
   width:100%;
-  background-image:linear-gradient(0deg,
-    #003ecc 0%,
-    #1a6bff 100%
-  );
+  background:#0052ff;color:#ffffff;
   font-size:0.65rem;font-family:var(--font-body);font-weight:600;
-  color:var(--card-white);
   border:0;border-radius:9999px;
-  box-shadow:inset 0 -2px 25px -4px var(--card-white);
   transition:var(--transition);margin-top:0.25rem;
   line-height:1.15;
 }
-.w-submit:hover{
-  transform:translateY(-1px);
-  background-image:linear-gradient(0deg,
-    #0030a3 0%,
-    #0052ff 100%
-  );
-}
+.w-submit:hover{background:#003ecc;transform:translateY(-1px)}
 .w-submit:disabled{opacity:0.5;cursor:not-allowed;transform:none}
 
 /* Step 3: Confirmation */
 .w-confirm{text-align:center;padding:0.5rem 0}
 .w-confirm .w-check-icon{
   width:2.5rem;height:2.5rem;border-radius:50%;
-  background:hsla(152,95%,40%,0.2);
+  background:rgba(5,177,105,0.15);
   display:flex;align-items:center;justify-content:center;
   margin:0 auto 0.75rem;
 }
@@ -660,29 +597,19 @@ ul{list-style:none}
 .w-confirm .w-done-text{
   font-family:var(--font-display);
   font-size:1rem;font-weight:500;
-  color:var(--card-white);margin-bottom:0.25rem;
+  color:#ffffff;margin-bottom:0.25rem;
 }
 .w-confirm .w-done-sub{
-  font-size:0.6rem;color:var(--card-paragraph);
+  font-size:0.6rem;color:#7c828a;
   line-height:1.5;margin-bottom:0.75rem;
 }
 .w-confirm .w-done-btn{
   cursor:pointer;padding:0.5rem 1.2rem;border-radius:9999px;
-  background-image:linear-gradient(0deg,
-    #003ecc 0%,
-    #1a6bff 100%
-  );
-  color:var(--card-white);
+  background:#0052ff;color:#ffffff;
   font-family:var(--font-body);font-size:0.65rem;font-weight:600;
-  border:0;box-shadow:inset 0 -2px 25px -4px var(--card-white);
-  transition:var(--transition);
+  border:0;transition:var(--transition);
 }
-.w-confirm .w-done-btn:hover{transform:translateY(-1px);
-  background-image:linear-gradient(0deg,
-    #0030a3 0%,
-    #0052ff 100%
-  );
-}
+.w-confirm .w-done-btn:hover{background:#003ecc;transform:translateY(-1px)}
 .w-spinner{
   width:0.85rem;height:0.85rem;
   border:2px solid rgba(255,255,255,0.3);
@@ -924,7 +851,6 @@ WEBINAR INTEREST POPUP — Styled Card
      ══════════════════════════════════════─ -->
 <div class="w-popup-overlay" id="webinarPopup" role="dialog" aria-modal="true" aria-label="Webinar interest">
   <div class="w-popup">
-    <div class="w-border"></div>
     <button class="w-close" id="wPopupClose" aria-label="Close popup">&#10005;</button>
     <div class="w-popup-body" id="wPopupBody">
       <!-- Step 1: Yes / No -->
