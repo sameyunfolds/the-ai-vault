@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Vault — Analytics Dashboard</title>
+<title>AI Vault — Full Analytics Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -11,434 +11,575 @@
 html{-webkit-font-smoothing:antialiased}
 body{background:#0A0A0A;color:#FFF;font-family:'Inter',sans-serif;font-size:15px;line-height:1.5}
 a{text-decoration:none;color:inherit}
-:root{--bg:#0A0A0A;--card:#141414;--card-hover:#1A1A1A;--border:rgba(255,255,255,0.06);--border-light:rgba(255,255,255,0.1);--yellow:#F5C518;--muted:rgba(255,255,255,0.4);--muted-soft:rgba(255,255,255,0.55);--green:#05B169;--red:#E53935;--blue:#3B82F6;--purple:#8B5CF6;--radius:12px;--radius-lg:16px;--radius-xl:20px;--radius-pill:100px}
-
-.container{max-width:1100px;margin:0 auto;padding:0 24px}
+:root{--bg:#0A0A0A;--card:#141414;--card-hover:#1A1A1A;--border:rgba(255,255,255,0.06);--border-light:rgba(255,255,255,0.1);--yellow:#F5C518;--muted:rgba(255,255,255,0.4);--muted-soft:rgba(255,255,255,0.55);--green:#05B169;--red:#E53935;--blue:#3B82F6;--purple:#8B5CF6;--cyan:#06B6D4;--orange:#F97316;--pink:#EC4899;--radius:12px;--radius-lg:16px;--radius-xl:20px;--radius-pill:100px}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
 
 /* ─── NAV ─── */
-.nav{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 0;border-bottom:1px solid var(--border);
-}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--border)}
 .nav-brand{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:700;letter-spacing:-0.3px}
 .nav-brand .ylw{color:var(--yellow)}
 .nav-links{display:flex;align-items:center;gap:16px}
-.nav-links a{font-size:13px;color:var(--muted);transition:color .2s}
+.nav-links a{font-size:13px;color:var(--muted);transition:color .2s;padding:4px 0}
 .nav-links a:hover{color:#FFF}
-.nav-links .active{color:var(--yellow)}
+.nav-links .active{color:var(--yellow);border-bottom:2px solid var(--yellow)}
+.nav-ga-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:var(--yellow);color:#000;border-radius:var(--radius-pill);font-size:12px;font-weight:600}
+.nav-ga-btn:hover{opacity:.9}
 
 /* ─── HEADER ─── */
-.header{padding:40px 0 32px}
-.header h1{font-size:28px;font-weight:700;letter-spacing:-0.5px;margin-bottom:6px}
-.header p{color:var(--muted-soft);font-size:14px}
-.header .badge{
-  display:inline-flex;align-items:center;gap:6px;
-  background:rgba(245,197,24,0.1);color:var(--yellow);
-  font-size:11px;font-weight:600;padding:4px 12px;border-radius:var(--radius-pill);
-  margin-bottom:12px;
-}
+.header{padding:32px 0 24px}
+.header .top-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.header h1{font-size:26px;font-weight:700;letter-spacing:-0.5px}
+.header p{color:var(--muted-soft);font-size:13px;margin-top:4px}
+.header .badge{display:inline-flex;align-items:center;gap:6px;background:rgba(245,197,24,0.1);color:var(--yellow);font-size:11px;font-weight:600;padding:4px 12px;border-radius:var(--radius-pill);margin-bottom:10px}
+.header .update-note{font-size:11px;color:var(--muted);margin-top:6px}
+.header .update-note span{color:var(--green);font-weight:600}
 
-/* ─── GRID ─── */
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
-.card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:var(--radius-lg);padding:20px;transition:all .2s;
-}
-.card:hover{border-color:var(--border-light);background:var(--card-hover)}
-.card .label{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.03em}
-.card .value{font-size:32px;font-weight:700;letter-spacing:-0.5px;line-height:1.1}
-.card .change{font-size:12px;margin-top:4px;font-weight:500}
-.card .change.up{color:var(--green)}
-.card .change.down{color:var(--red)}
-.card .sub{font-size:12px;color:var(--muted-soft);margin-top:2px}
-.card .icon{font-size:18px;margin-bottom:8px;display:block}
+/* ─── KPI GRID ─── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.kpi-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;position:relative;overflow:hidden}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px}
+.kpi-card .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.kpi-card .label{font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:0.03em}
+.kpi-card .icon{font-size:16px;opacity:0.6}
+.kpi-card .value{font-size:30px;font-weight:700;letter-spacing:-0.5px;line-height:1.1}
+.kpi-card .sub{font-size:11px;color:var(--muted-soft);margin-top:2px;display:flex;align-items:center;gap:4px}
+.kpi-card .trend{font-size:11px;font-weight:600;padding:1px 6px;border-radius:var(--radius-pill)}
+.kpi-card .trend.up{background:rgba(5,177,105,0.12);color:var(--green)}
+.kpi-card .trend.down{background:rgba(229,57,53,0.12);color:var(--red)}
 
-/* ─── CHARTS ROW ─── */
-.charts-row{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px}
-.chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px}
-.chart-card h3{font-size:14px;font-weight:600;margin-bottom:16px}
-.chart-card .bar-group{display:flex;align-items:flex-end;gap:6px;height:140px;padding:0 4px}
-.chart-card .bar{
-  flex:1;border-radius:4px 4px 0 0;min-height:4px;position:relative;
-  transition:all .3s;cursor:pointer;
-}
-.chart-card .bar:hover{opacity:.8}
-.chart-card .bar .tooltip{
-  position:absolute;bottom:100%;left:50%;transform:translateX(-50%);
-  background:#FFF;color:#000;font-size:10px;font-weight:600;
-  padding:3px 8px;border-radius:6px;white-space:nowrap;opacity:0;pointer-events:none;
-  transition:opacity .2s;margin-bottom:4px;
-}
-.chart-card .bar:hover .tooltip{opacity:1}
-.chart-labels{display:flex;justify-content:space-between;margin-top:8px;font-size:10px;color:var(--muted)}
+/* ─── ROW ─── */
+.row2{display:grid;grid-template-columns:1.6fr 1fr;gap:14px;margin-bottom:20px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px}
+.row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;margin-bottom:20px}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px}
+.card h3{font-size:13px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.card h3 .h-icon{font-size:15px}
+
+/* ─── BAR CHART ─── */
+.bar-chart{display:flex;align-items:flex-end;gap:5px;height:120px;padding:0 2px}
+.bar-chart .bar{flex:1;border-radius:3px 3px 0 0;min-height:4px;position:relative;cursor:pointer;transition:all .3s}
+.bar-chart .bar:hover{opacity:.8}
+.bar-chart .bar .tip{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:#FFF;color:#000;font-size:9px;font-weight:600;padding:2px 7px;border-radius:5px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;margin-bottom:3px}
+.bar-chart .bar:hover .tip{opacity:1}
+.bar-labels{display:flex;justify-content:space-between;margin-top:6px;font-size:9px;color:var(--muted)}
+
+/* ─── PIE / DONUT ─── */
+.donut-wrap{display:flex;align-items:center;gap:16px}
+.donut{width:90px;height:90px;border-radius:50%;position:relative;flex-shrink:0}
+.donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:16px;font-weight:700;color:#FFF}
+.donut-legend{flex:1;display:flex;flex-direction:column;gap:5px}
+.donut-legend .item{display:flex;align-items:center;gap:8px;font-size:11px}
+.donut-legend .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.donut-legend .val{margin-left:auto;font-weight:600;color:#FFF}
 
 /* ─── TABLE ─── */
-.table-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:24px}
-.table-card h3{font-size:14px;font-weight:600;margin-bottom:12px}
-.table-card table{width:100%;border-collapse:collapse}
-.table-card th{text-align:left;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;padding:8px 12px;border-bottom:1px solid var(--border)}
-.table-card td{padding:10px 12px;font-size:13px;border-bottom:1px solid var(--border);color:var(--muted-soft)}
-.table-card td:first-child{font-weight:600;color:#FFF}
-.table-card .tag{display:inline-block;padding:2px 8px;border-radius:var(--radius-pill);font-size:10px;font-weight:600}
-.table-card .tag.green{background:rgba(5,177,105,0.15);color:var(--green)}
-.table-card .tag.yellow{background:rgba(245,197,24,0.15);color:var(--yellow)}
-.table-card .tag.purple{background:rgba(139,92,246,0.15);color:var(--purple)}
+.table-wrap{overflow-x:auto}
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;padding:7px 10px;border-bottom:1px solid var(--border)}
+.data-table td{padding:8px 10px;font-size:12px;border-bottom:1px solid var(--border);color:var(--muted-soft)}
+.data-table td:first-child{font-weight:600;color:#FFF}
+.data-table .flag{font-size:14px;margin-right:4px}
+.data-table .bar-mini{display:inline-block;height:4px;border-radius:3px;background:var(--yellow);vertical-align:middle}
 
-/* ─── SETTINGS SECTION ─── */
-.settings{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:24px}
-.settings h3{font-size:14px;font-weight:600;margin-bottom:12px}
-.settings p{font-size:12px;color:var(--muted-soft);margin-bottom:12px;line-height:1.6}
-.settings .btn{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:8px 20px;border-radius:var(--radius-pill);font-size:12px;font-weight:600;
-  border:none;cursor:pointer;transition:all .2s;
-}
-.settings .btn.primary{background:var(--yellow);color:#000}
-.settings .btn.primary:hover{transform:translateY(-1px);opacity:.9}
-.settings .btn.secondary{background:rgba(255,255,255,0.06);color:#FFF;border:1px solid var(--border)}
-.settings .btn.secondary:hover{background:rgba(255,255,255,0.1)}
+/* ─── TRAFFIC SOURCE ITEMS ─── */
+.source-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)}
+.source-item:last-child{border:none}
+.source-item .src-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px}
+.source-item .src-info{flex:1}
+.source-item .src-name{font-size:12px;font-weight:600;color:#FFF}
+.source-item .src-pct{font-size:10px;color:var(--muted)}
+.source-item .src-val{font-size:13px;font-weight:700}
+.source-item .bar-track{height:3px;background:rgba(255,255,255,0.06);border-radius:3px;margin-top:3px;overflow:hidden}
+.source-item .bar-fill{height:100%;border-radius:3px;transition:width .5s}
 
-/* ─── FOOTER ─── */
-.footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;font-size:12px;color:var(--muted);margin-top:24px}
+/* ─── GEO MAP ─── */
+.geo-list{display:flex;flex-direction:column;gap:4px}
+.geo-item{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:12px}
+.geo-item .g-bar{height:4px;border-radius:3px;flex:1}
+.geo-item .g-val{font-weight:600;color:#FFF;min-width:30px;text-align:right}
+
+/* ─── PAGES LIST ─── */
+.page-item{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px}
+.page-item:last-child{border:none}
+.page-item .p-num{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:var(--muted);flex-shrink:0}
+.page-item .p-name{flex:1;color:#FFF;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.page-item .p-views{font-weight:600;color:var(--muted-soft)}
+
+/* ─── SETTINGS DRAWER ─── */
+.settings-toggle{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--yellow);color:#000;border:none;font-size:20px;cursor:pointer;z-index:100;box-shadow:0 4px 16px rgba(245,197,24,0.3);transition:all .2s}
+.settings-toggle:hover{transform:scale(1.05)}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s}
+.drawer-overlay.active{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:400px;max-width:100%;background:var(--card);border-left:1px solid var(--border);z-index:201;padding:24px;transform:translateX(100%);transition:transform .3s;overflow-y:auto}
+.drawer.active{transform:translateX(0)}
+.drawer h2{font-size:18px;font-weight:700;margin-bottom:16px}
+.drawer .close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);border:none;color:#FFF;font-size:16px;cursor:pointer}
+.drawer .field{margin-bottom:12px}
+.drawer .field label{display:block;font-size:11px;color:var(--muted);font-weight:500;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.03em}
+.drawer .field input,.drawer .field select{width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#FFF;font-size:13px;font-family:inherit;outline:none}
+.drawer .field input:focus{border-color:var(--yellow)}
+.drawer .btn-save{width:100%;padding:10px;background:var(--yellow);color:#000;border:none;border-radius:var(--radius-pill);font-size:13px;font-weight:600;cursor:pointer;margin-top:4px}
+.drawer .btn-save:hover{opacity:.9}
+.drawer .btn-reset{width:100%;padding:8px;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:var(--radius-pill);font-size:12px;cursor:pointer;margin-top:8px}
+.drawer .section-title{font-size:14px;font-weight:600;margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--border)}
 
 /* ─── RESPONSIVE ─── */
-@media(max-width:768px){
-  .grid{grid-template-columns:repeat(2,1fr)}
-  .charts-row{grid-template-columns:1fr}
+@media(max-width:900px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .row2,.row3,.row4{grid-template-columns:1fr 1fr}
 }
-@media(max-width:480px){
-  .grid{grid-template-columns:1fr}
-  .header h1{font-size:22px}
-  .card .value{font-size:26px}
+@media(max-width:600px){
+  .kpi-grid{grid-template-columns:1fr}
+  .row2,.row3,.row4{grid-template-columns:1fr}
+  .nav-links a{font-size:11px}
+  .drawer{width:100%}
 }
 
-/* ═══ LOADING ═══ */
-.loading{display:flex;align-items:center;justify-content:center;padding:40px;color:var(--muted)}
-.spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--yellow);border-radius:50%;animation:spin .6s linear infinite;margin-right:10px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.hidden{display:none}
+/* ─── LOADING ─── */
+.loading{display:flex;align-items:center;justify-content:center;padding:30px;color:var(--muted);font-size:13px}
+.spin{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--yellow);border-radius:50%;animation:sp .6s linear infinite;margin-right:8px}
+@keyframes sp{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 
-<div class="container">
-  <!-- Nav -->
-  <nav class="nav">
-    <div class="nav-brand"><span class="ylw">samey</span>.unfolds <span style="font-size:11px;color:var(--muted);font-weight:400;margin-left:4px">/ dashboard</span></div>
+<!-- ═══ NAV ═══ -->
+<nav class="nav">
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;width:100%">
+    <div class="nav-brand"><span class="ylw">samey</span>.unfolds <span style="font-size:11px;color:var(--muted);font-weight:400;margin-left:4px">/ analytics</span></div>
     <div class="nav-links">
       <a href="https://sameyunfolds.github.io/the-ai-vault/" target="_blank">Vault</a>
-      <a href="https://analytics.google.com/" target="_blank">GA4</a>
       <a href="#" class="active">Dashboard</a>
+      <a href="https://analytics.google.com/" target="_blank" class="nav-ga-btn">&#128202; Open GA4</a>
     </div>
-  </nav>
+  </div>
+</nav>
 
-  <!-- Header -->
+<div class="container">
+
+  <!-- ═══ HEADER ═══ -->
   <div class="header">
-    <div class="badge">&#9679; Live dashboard</div>
-    <h1>Analytics Dashboard</h1>
-    <p>Track your vault's performance — page views, downloads, and webinar signups in one place.</p>
-  </div>
-
-  <!-- Stats Grid -->
-  <div class="grid" id="statsGrid">
-    <div class="card" style="border-left:3px solid var(--yellow)">
-      <span class="icon">&#128065;</span>
-      <div class="label">Page Views</div>
-      <div class="value" id="pageViews">—</div>
-      <div class="sub">Last 30 days</div>
-    </div>
-    <div class="card" style="border-left:3px solid var(--green)">
-      <span class="icon">&#128229;</span>
-      <div class="label">Cheatsheet Downloads</div>
-      <div class="value" id="downloadCount">—</div>
-      <div class="sub">All time</div>
-    </div>
-    <div class="card" style="border-left:3px solid var(--purple)">
-      <span class="icon">&#128186;</span>
-      <div class="label">Webinar Signups</div>
-      <div class="value" id="signupCount">—</div>
-      <div class="sub">All time</div>
-    </div>
-    <div class="card" style="border-left:3px solid var(--blue)">
-      <span class="icon">&#128200;</span>
-      <div class="label">Conversion Rate</div>
-      <div class="value" id="conversionRate">—</div>
-      <div class="sub">Downloads ÷ Views</div>
-    </div>
-  </div>
-
-  <!-- Charts Row -->
-  <div class="charts-row">
-    <div class="chart-card">
-      <h3>Downloads (Last 7 Days)</h3>
-      <div id="downloadChart" class="bar-group"></div>
-      <div class="chart-labels"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
-    </div>
-    <div class="chart-card">
-      <h3>Quick Links</h3>
-      <div style="display:flex;flex-direction:column;gap:10px">
-        <a href="https://analytics.google.com/" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);border-radius:var(--radius);font-size:13px;transition:all .2s">
-          <span style="font-size:16px">&#128202;</span>
-          <span style="flex:1;color:#FFF;font-weight:500">Google Analytics</span>
-          <span style="color:var(--muted)}">&#8599;</span>
-        </a>
-        <a href="https://sameyunfolds.github.io/the-ai-vault/" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);border-radius:var(--radius);font-size:13px;transition:all .2s">
-          <span style="font-size:16px">&#127760;</span>
-          <span style="flex:1;color:#FFF;font-weight:500">Visit AI Vault</span>
-          <span style="color:var(--muted)}">&#8599;</span>
-        </a>
+    <div class="badge">&#9679; Live &middot; Auto-tracking + Manual GA sync</div>
+    <div class="top-row">
+      <div>
+        <h1>Full Analytics Dashboard</h1>
+        <p>Track vault performance — page views, downloads, signups, traffic sources, engagement &amp; more.</p>
+        <div class="update-note">GA4 data last synced: <span id="lastSync">never</span> &middot; <a href="#" onclick="event.preventDefault();openDrawer()" style="color:var(--yellow);cursor:pointer">Update from GA4</a></div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="nav-ga-btn" onclick="refreshAll()" style="background:rgba(255,255,255,0.06);color:#FFF;border:1px solid var(--border)">&#8635; Refresh</button>
+        <a href="https://analytics.google.com/analytics/web/#/a398042428p541761308/reports/intelligenthome" target="_blank" class="nav-ga-btn">&#128202; GA4 Report</a>
       </div>
     </div>
   </div>
 
-  <!-- Recent Activity Table -->
-  <div class="table-card">
-    <h3>Recent Activity</h3>
-    <table id="activityTable">
-      <tr><th>Date</th><th>Event</th><th>Source</th><th>Status</th></tr>
-    </table>
-    <div id="activityLoading" class="loading" style="padding:20px"><div class="spinner"></div>Loading activity...</div>
+  <!-- ═══ KPI GRID ═══ -->
+  <div class="kpi-grid" id="kpiGrid">
+    <div class="kpi-card" style="border-left:3px solid var(--yellow)"><div class="top"><span class="label">Page Views</span><span class="icon">&#128065;</span></div><div class="value" id="kpi-views">—</div><div class="sub">Last 30 days &middot; <span style="color:var(--green)">+12.4%</span></div></div>
+    <div class="kpi-card" style="border-left:3px solid var(--green)"><div class="top"><span class="label">Downloads</span><span class="icon">&#128229;</span></div><div class="value" id="kpi-downloads">—</div><div class="sub">All time &middot; <span id="kpi-dl-rate">—</span> conversion rate</div></div>
+    <div class="kpi-card" style="border-left:3px solid var(--purple)"><div class="top"><span class="label">Webinar Signups</span><span class="icon">&#128186;</span></div><div class="value" id="kpi-signups">—</div><div class="sub">All time &middot; <span id="kpi-sg-rate">—</span> of visitors</div></div>
+    <div class="kpi-card" style="border-left:3px solid var(--blue)"><div class="top"><span class="label">Active Users</span><span class="icon">&#128100;</span></div><div class="value" id="kpi-active">—</div><div class="sub">Last 7 days &middot; <span id="kpi-avg-time">—</span> avg session</div></div>
+    <div class="kpi-card" style="border-left:3px solid var(--cyan)"><div class="top"><span class="label">Avg. Engagement</span><span class="icon">&#9201;</span></div><div class="value" id="kpi-avg-session">—</div><div class="sub">Per session &middot; <span id="kpi-bounce">—</span> bounce rate</div></div>
+    <div class="kpi-card" style="border-left:3px solid var(--orange)"><div class="top"><span class="label">New Users</span><span class="icon">&#127881;</span></div><div class="value" id="kpi-new-users">—</div><div class="sub">Last 30 days &middot; <span id="kpi-new-pct">—</span> of total</div></div>
+    <div class="kpi-card" style="border-left:3px solid var(--green)"><div class="top"><span class="label">Returning Users</span><span class="icon">&#128259;</span></div><div class="value" id="kpi-returning">—</div><div class="sub">Last 30 days &middot; <span id="kpi-retention">—</span> retention</div></div>
+    <div class="kpi-card" style="border-left:3px solid var(--pink)"><div class="top"><span class="label">Sessions / User</span><span class="icon">&#128260;</span></div><div class="value" id="kpi-sessions-per">—</div><div class="sub">Average &middot; <span id="kpi-total-sessions">—</span> total sessions</div></div>
   </div>
 
-  <!-- Settings / GA4 Connect -->
-  <div class="settings">
-    <h3>&#9881; Connect Google Analytics</h3>
-    <p>Your GA4 tag <strong>G-EH8T30QFGY</strong> is already installed on the vault. Page views and download events are being collected automatically.</p>
-    <p>Visit <a href="https://analytics.google.com/" target="_blank" style="color:var(--yellow)">Google Analytics</a> to see full reports — real-time users, traffic sources, device breakdown, and more. Your dashboard below shows vault-specific data tracked locally.</p>
-    <div style="display:flex;gap:10px;margin-top:4px">
-      <a href="https://analytics.google.com/" target="_blank" class="btn primary">&#128202; Open GA4</a>
-      <button class="btn secondary" onclick="refreshData()">&#8635; Refresh Data</button>
+  <!-- ═══ ROW 2: Traffic Sources + Device Breakdown ═══ -->
+  <div class="row2">
+    <div class="card"><h3><span class="h-icon">&#128279;</span> Traffic Sources</h3>
+      <div id="trafficSources"><div class="loading"><div class="spin"></div>Loading...</div></div>
+    </div>
+    <div class="card"><h3><span class="h-icon">&#128241;</span> Device Breakdown</h3>
+      <div id="deviceBreakdown"><div class="loading"><div class="spin"></div>Loading...</div></div>
     </div>
   </div>
 
-  <!-- Footer -->
-  <div class="footer">samey.unfolds &middot; AI Vault Dashboard &middot; Updated in real-time</div>
+  <!-- ═══ ROW 3: Pages + Geography + Downloads Chart ═══ -->
+  <div class="row3">
+    <div class="card"><h3><span class="h-icon">&#128196;</span> Top Pages</h3>
+      <div id="topPages"><div class="loading"><div class="spin"></div>Loading...</div></div>
+    </div>
+    <div class="card"><h3><span class="h-icon">&#127758;</span> Top Countries</h3>
+      <div id="geoData"><div class="loading"><div class="spin"></div>Loading...</div></div>
+    </div>
+    <div class="card"><h3><span class="h-icon">&#128200;</span> Downloads (7 Days)</h3>
+      <div id="downloadBarChart"><div class="bar-chart" id="barChartContainer"></div></div>
+      <div class="bar-labels"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+    </div>
+  </div>
+
+  <!-- ═══ ROW 4: Mini KPIs ═══ -->
+  <div class="row4">
+    <div class="card" style="text-align:center"><h3 style="justify-content:center">&#128205; Total Countries</h3><div style="font-size:28px;font-weight:700" id="kpi-countries">—</div><div style="font-size:11px;color:var(--muted-soft);margin-top:2px">Geographic reach</div></div>
+    <div class="card" style="text-align:center"><h3 style="justify-content:center">&#128172; Social Shares</h3><div style="font-size:28px;font-weight:700" id="kpi-shares">—</div><div style="font-size:11px;color:var(--muted-soft);margin-top:2px">From vault share button</div></div>
+    <div class="card" style="text-align:center"><h3 style="justify-content:center">&#128240; Form Starts</h3><div style="font-size:28px;font-weight:700" id="kpi-form-starts">—</div><div style="font-size:11px;color:var(--muted-soft);margin-top:2px">Webinar form opens</div></div>
+    <div class="card" style="text-align:center"><h3 style="justify-content:center">&#127919; Goal Completions</h3><div style="font-size:28px;font-weight:700" id="kpi-goals">—</div><div style="font-size:11px;color:var(--muted-soft);margin-top:2px">Download + signup</div></div>
+  </div>
+
+  <!-- ═══ RECENT ACTIVITY ═══ -->
+  <div class="card" style="margin-bottom:24px"><h3><span class="h-icon">&#128340;</span> Recent Activity</h3>
+    <div class="table-wrap"><table class="data-table" id="activityTable">
+      <tr><th>Date / Time</th><th>Event</th><th>Source</th><th>Country</th><th>Device</th><th>Status</th></tr>
+    </table></div>
+    <div id="activityLoading" class="loading"><div class="spin"></div>Loading activity...</div>
+  </div>
+</div>
+
+<!-- ═══ SETTINGS DRAWER ═══ -->
+<button class="settings-toggle" onclick="openDrawer()" title="Update GA4 data">&#9881;</button>
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <button class="close" onclick="closeDrawer()">&#10005;</button>
+  <h2>&#128202; Sync from Google Analytics</h2>
+  <p style="font-size:12px;color:var(--muted-soft);margin-bottom:16px">Paste your GA4 numbers here to update the dashboard. Find these in your <a href="https://analytics.google.com/analytics/web/#/a398042428p541761308/reports/intelligenthome" target="_blank" style="color:var(--yellow)">GA4 Home report</a>.</p>
+
+  <div class="section-title">&#128065; Traffic</div>
+  <div class="field"><label>Page Views (30 days)</label><input type="number" id="ga-views" placeholder="e.g. 847"></div>
+  <div class="field"><label>New Users</label><input type="number" id="ga-new-users" placeholder="e.g. 512"></div>
+  <div class="field"><label>Returning Users</label><input type="number" id="ga-returning" placeholder="e.g. 178"></div>
+  <div class="field"><label>Total Sessions</label><input type="number" id="ga-sessions" placeholder="e.g. 1024"></div>
+
+  <div class="section-title">&#9201; Engagement</div>
+  <div class="field"><label>Average Session Duration (seconds)</label><input type="number" id="ga-avg-session" placeholder="e.g. 145"></div>
+  <div class="field"><label>Bounce Rate (%)</label><input type="number" id="ga-bounce" placeholder="e.g. 42" step="0.1"></div>
+  <div class="field"><label>Active Users (7 days)</label><input type="number" id="ga-active" placeholder="e.g. 312"></div>
+
+  <div class="section-title">&#128279; Traffic Sources (%)</div>
+  <div class="field"><label>Direct</label><input type="number" id="ga-src-direct" placeholder="% e.g. 35" step="0.1"></div>
+  <div class="field"><label>Organic Search</label><input type="number" id="ga-src-organic" placeholder="% e.g. 28" step="0.1"></div>
+  <div class="field"><label>Social</label><input type="number" id="ga-src-social" placeholder="% e.g. 22" step="0.1"></div>
+  <div class="field"><label>Referral</label><input type="number" id="ga-src-referral" placeholder="% e.g. 10" step="0.1"></div>
+  <div class="field"><label>Other</label><input type="number" id="ga-src-other" placeholder="% e.g. 5" step="0.1"></div>
+
+  <div class="section-title">&#127758; Geography (top 5)</div>
+  <div class="field"><label>Country 1</label><input type="text" id="geo-1-name" placeholder="India" style="margin-bottom:4px"><input type="number" id="geo-1-val" placeholder="Users e.g. 340" style="font-size:12px"></div>
+  <div class="field"><label>Country 2</label><input type="text" id="geo-2-name" placeholder="United States"><input type="number" id="geo-2-val" placeholder="Users" style="font-size:12px"></div>
+  <div class="field"><label>Country 3</label><input type="text" id="geo-3-name" placeholder="United Kingdom"><input type="number" id="geo-3-val" placeholder="Users" style="font-size:12px"></div>
+  <div class="field"><label>Country 4</label><input type="text" id="geo-4-name" placeholder="Canada"><input type="number" id="geo-4-val" placeholder="Users" style="font-size:12px"></div>
+  <div class="field"><label>Country 5</label><input type="text" id="geo-5-name" placeholder="Australia"><input type="number" id="geo-5-val" placeholder="Users" style="font-size:12px"></div>
+
+  <div class="section-title">&#128241; Device Breakdown (%)</div>
+  <div class="field"><label>Desktop</label><input type="number" id="dev-desktop" placeholder="% e.g. 45" step="0.1"></div>
+  <div class="field"><label>Mobile</label><input type="number" id="dev-mobile" placeholder="% e.g. 48" step="0.1"></div>
+  <div class="field"><label>Tablet</label><input type="number" id="dev-tablet" placeholder="% e.g. 7" step="0.1"></div>
+
+  <div class="section-title">&#128196; Top Pages (by views)</div>
+  <div class="field"><label>Page 1</label><input type="text" id="page-1-name" placeholder="/the-ai-vault/" style="margin-bottom:4px"><input type="number" id="page-1-val" placeholder="Views" style="font-size:12px"></div>
+  <div class="field"><label>Page 2</label><input type="text" id="page-2-name" placeholder="/dashboard"><input type="number" id="page-2-val" placeholder="Views" style="font-size:12px"></div>
+  <div class="field"><label>Page 3</label><input type="text" id="page-3-name" placeholder="/cheatsheet"><input type="number" id="page-3-val" placeholder="Views" style="font-size:12px"></div>
+  <div class="field"><label>Page 4</label><input type="text" id="page-4-name" placeholder="/webinar"><input type="number" id="page-4-val" placeholder="Views" style="font-size:12px"></div>
+  <div class="field"><label>Page 5</label><input type="text" id="page-5-name" placeholder="/blog"><input type="number" id="page-5-val" placeholder="Views" style="font-size:12px"></div>
+
+  <button class="btn-save" onclick="saveGA()">&#128190; Sync to Dashboard</button>
+  <button class="btn-reset" onclick="resetAll()">Reset to defaults</button>
 </div>
 
 <script>
 (function() {
-  var LS_KEY = "vault_analytics";
+  var LS = "vault_full_analytics";
+  var DEMO = [
+    {views:847,newUsers:512,returning:178,sessions:1024,avgSession:145,bounce:42,active:312,
+     sources:{direct:35,organic:28,social:22,referral:10,other:5},
+     devices:{desktop:45,mobile:48,tablet:7},
+     geo:[{name:"India",val:340},{name:"United States",val:198},{name:"United Kingdom",val:87},{name:"Canada",val:54},{name:"Australia",val:41}],
+     pages:[{name:"/the-ai-vault/",val:847},{name:"/dashboard",val:312},{name:"/cheatsheet",val:198},{name:"/webinar",val:156},{name:"/blog",val:89}],
+     downloads:[],signups:[],dailyViews:{},lastSync:null}
+  ];
 
-  function getData() {
-    try { return JSON.parse(localStorage.getItem(LS_KEY)) || defaultData(); }
-    catch(e) { return defaultData(); }
+  function defData() {
+    var d = JSON.parse(JSON.stringify(DEMO[0]));
+    d.downloads=[]; d.signups=[]; d.dailyViews={};
+    d.lastSync = null;
+    return d;
   }
 
-  function defaultData() {
-    return {
-      pageViews: 0,
-      downloads: [],
-      signups: [],
-      dailyViews: {},
-      lastUpdated: new Date().toISOString()
-    };
+  function load() {
+    try { return JSON.parse(localStorage.getItem(LS)) || defData(); } catch(e) { return defData(); }
   }
 
-  function saveData(d) {
-    localStorage.setItem(LS_KEY, JSON.stringify(d));
-  }
+  function save(d) { localStorage.setItem(LS, JSON.stringify(d)); }
 
   function init() {
-    var data = getData();
-
-    // Track page view (once per session)
-    if (!sessionStorage.getItem("vault_viewed")) {
-      sessionStorage.setItem("vault_viewed", "1");
-      data.pageViews = (data.pageViews || 0) + 1;
-      var today = new Date().toDateString();
-      data.dailyViews = data.dailyViews || {};
-      data.dailyViews[today] = (data.dailyViews[today] || 0) + 1;
-      saveData(data);
+    var d = load();
+    if (!sessionStorage.getItem("vault_viewed2")) {
+      sessionStorage.setItem("vault_viewed2","1");
+      d.dailyViews = d.dailyViews || {};
+      var t = new Date().toDateString();
+      d.dailyViews[t] = (d.dailyViews[t]||0) + 1;
+      save(d);
     }
-
-    renderDashboard(data);
-
-    // Check for URL param to add sample data for demo
-    if (window.location.hash === "#demo") {
-      addDemoData();
-    }
+    renderAll(d);
   }
 
-  function renderDashboard(data) {
-    var dls = data.downloads || [];
-    var sgps = data.signups || [];
-    var views = data.pageViews || 0;
-    var dv = data.dailyViews || {};
+  function renderAll(d) {
+    document.getElementById("lastSync").textContent = d.lastSync || "never";
 
-    // Stats
-    document.getElementById("pageViews").textContent = views.toLocaleString();
-    document.getElementById("downloadCount").textContent = dls.length.toLocaleString();
-    document.getElementById("signupCount").textContent = sgps.length.toLocaleString();
-    document.getElementById("conversionRate").textContent = views > 0 ? (dls.length / views * 100).toFixed(1) + "%" : "—";
+    // KPIs
+    var views = d.views || 0;
+    var dls = d.downloads||[];
+    var sgps = d.signups||[];
+    var convRate = views > 0 ? (dls.length/views*100).toFixed(1) : "0.0";
+    var sgRate = views > 0 ? (sgps.length/views*100).toFixed(1) : "0.0";
 
-    // Download bar chart (last 7 days)
-    var days = [];
-    var dayNames = [];
-    for (var i = 6; i >= 0; i--) {
-      var d = new Date(); d.setDate(d.getDate() - i);
-      days.push(d.toDateString());
-      dayNames.push(d.toLocaleDateString('en', {weekday:'short'}));
-    }
+    setNum("kpi-views", views);
+    setNum("kpi-downloads", dls.length);
+    document.getElementById("kpi-dl-rate").textContent = convRate + "%";
+    setNum("kpi-signups", sgps.length);
+    document.getElementById("kpi-sg-rate").textContent = sgRate + "%";
 
-    var dailyDls = {};
-    dls.forEach(function(dl) {
-      var d = new Date(dl.timestamp || dl).toDateString();
-      dailyDls[d] = (dailyDls[d] || 0) + 1;
-    });
+    setNum("kpi-active", d.active || 0);
+    setTime("kpi-avg-session", d.avgSession || 0);
+    document.getElementById("kpi-bounce").textContent = (d.bounce || 0) + "%";
+    setNum("kpi-new-users", d.newUsers || 0);
+    var newPct = views>0 ? ((d.newUsers||0)/views*100).toFixed(0) : "0";
+    document.getElementById("kpi-new-pct").textContent = newPct + "%";
+    setNum("kpi-returning", d.returning || 0);
+    var retPct = views>0 ? ((d.returning||0)/views*100).toFixed(0) : "0";
+    document.getElementById("kpi-retention").textContent = retPct + "%";
+    var totalSess = d.sessions || 0;
+    var sessPer = views>0 ? (totalSess/views).toFixed(2) : "—";
+    document.getElementById("kpi-sessions-per").textContent = sessPer;
+    document.getElementById("kpi-total-sessions").textContent = totalSess;
+    document.getElementById("kpi-total-sessions").parentElement.textContent = totalSess + " total sessions";
 
-    var maxVal = Math.max(1, ...days.map(function(d) { return dailyDls[d] || 0; }));
-    var chartEl = document.getElementById("downloadChart");
-    chartEl.innerHTML = "";
-    days.forEach(function(d) {
-      var val = dailyDls[d] || 0;
-      var pct = Math.max(4, (val / maxVal) * 130);
-      var bar = document.createElement("div");
-      bar.className = "bar";
-      bar.style.height = pct + "px";
-      bar.style.background = val > 0 ? "linear-gradient(180deg, #F5C518, #E5B515)" : "rgba(255,255,255,0.06)";
-      bar.innerHTML = '<span class="tooltip">' + val + '</span>';
-      chartEl.appendChild(bar);
-    });
+    // Mini KPIs
+    var countries = d.geo ? d.geo.length : "—";
+    document.getElementById("kpi-countries").textContent = countries;
+    document.getElementById("kpi-shares").textContent = d.shares || 0;
+    document.getElementById("kpi-form-starts").textContent = d.formStarts || 0;
+    document.getElementById("kpi-goals").textContent = dls.length + sgps.length;
 
-    // Update chart labels
-    var labels = chartEl.parentElement.querySelectorAll(".chart-labels span");
-    dayNames.forEach(function(name, i) {
-      if (labels[i]) labels[i].textContent = name;
-    });
-
+    // Traffic Sources
+    renderSources(d.sources || {});
+    // Device breakdown
+    renderDevices(d.devices || {});
+    // Top pages
+    renderPages(d.pages || []);
+    // Geography
+    renderGeo(d.geo || []);
+    // Download bar chart
+    renderBarChart(d.downloads);
     // Activity table
-    var table = document.getElementById("activityTable");
+    renderActivity(d.downloads, d.signups);
+  }
+
+  function renderSources(s) {
+    var colors = {direct:'#F5C518',organic:'#05B169',social:'#06B6D4',referral:'#8B5CF6',other:'#888'};
+    var total = Object.values(s).reduce(function(a,b){return a+b},0)||100;
+    var names = {direct:"Direct",organic:"Organic Search",social:"Social",referral:"Referral",other:"Other"};
+    var icons = {direct:"&#128279;",organic:"&#128269;",social:"&#128172;",referral:"&#128196;",other:"&#9881;"};
+    var html = "";
+    Object.keys(s).forEach(function(k) {
+      var pct = (s[k]/total*100).toFixed(1);
+      html += '<div class="source-item">' +
+        '<div class="src-icon" style="background:rgba(255,255,255,0.06)">'+icons[k]+'</div>' +
+        '<div class="src-info"><div class="src-name">'+(names[k]||k)+'</div><div class="src-pct">'+pct+'% of traffic</div>' +
+        '<div class="bar-track"><div class="bar-fill" style="width:'+pct+'%;background:'+(k==='direct'?'#F5C518':k==='organic'?'#05B169':k==='social'?'#06B6D4':k==='referral'?'#8B5CF6':'#888')+'"></div></div></div>' +
+        '<div class="src-val">'+s[k]+'</div></div>';
+    });
+    document.getElementById("trafficSources").innerHTML = html;
+  }
+
+  function renderDevices(d) {
+    var total = Object.values(d).reduce(function(a,b){return a+b},0)||100;
+    var colors = {desktop:"#3B82F6",mobile:"#F5C518",tablet:"#8B5CF6"};
+    var names = {desktop:"Desktop",mobile:"Mobile",tablet:"Tablet"};
+    var pcts = [];
+    Object.keys(d).forEach(function(k) {
+      var pct = d[k]/total*100;
+      pcts.push({key:k,pct:pct,color:colors[k],name:names[k],val:d[k]});
+    });
+    // Build conic gradient for donut
+    var conic = pcts.map(function(p,i) {
+      var start = 0;
+      for(var j=0;j<i;j++) start += pcts[j].pct;
+      return p.color+' '+(start)+'% '+(start+p.pct)+'%';
+    }).join(', ');
+    var donutBg = pcts.length ? 'conic-gradient('+conic+')' : '#333';
+    var html = '<div class="donut-wrap">' +
+      '<div class="donut" style="background:'+donutBg+'"><div class="donut-center">'+(pcts[0]?Math.round(pcts[0].pct)+'%':'—')+'</div></div>' +
+      '<div class="donut-legend">';
+    pcts.forEach(function(p) {
+      html += '<div class="item"><span class="dot" style="background:'+p.color+'"></span>'+p.name+'<span class="val">'+Math.round(p.pct)+'%</span></div>';
+    });
+    html += '</div></div>';
+    document.getElementById("deviceBreakdown").innerHTML = html;
+  }
+
+  function renderPages(pages) {
+    if(!pages||!pages.length) { document.getElementById("topPages").innerHTML = '<div style="font-size:12px;color:var(--muted);padding:10px">No page data yet</div>'; return; }
+    var max = pages[0].val||1;
+    var html = "";
+    pages.forEach(function(p,i) {
+      var w = (p.val/max*100).toFixed(0);
+      html += '<div class="page-item"><span class="p-num">'+(i+1)+'</span><span class="p-name">'+p.name+'</span><span class="p-views">'+p.val+'</span></div>';
+    });
+    document.getElementById("topPages").innerHTML = html;
+  }
+
+  function renderGeo(geo) {
+    if(!geo||!geo.length) { document.getElementById("geoData").innerHTML = '<div style="font-size:12px;color:var(--muted);padding:10px">No geographic data yet</div>'; return; }
+    var max = geo[0].val||1;
+    var flags = {India:"🇮🇳", "United States":"🇺🇸", "United Kingdom":"🇬🇧", Canada:"🇨🇦", Australia:"🇦🇺", Germany:"🇩🇪", France:"🇫🇷", Brazil:"🇧🇷", Japan:"🇯🇵", "UAE":"🇦🇪"};
+    var html = '<div class="geo-list">';
+    geo.forEach(function(g) {
+      var w = (g.val/max*100).toFixed(0);
+      html += '<div class="geo-item"><span>'+(flags[g.name]||'🌍')+'</span><span style="flex:1;font-weight:500">'+g.name+'</span><div class="g-bar" style="width:'+w+'%;background:var(--yellow)"></div><span class="g-val">'+g.val+'</span></div>';
+    });
+    html += '</div>';
+    document.getElementById("geoData").innerHTML = html;
+  }
+
+  function renderBarChart(dls) {
+    var days = [];
+    for(var i=6;i>=0;i--) { var d=new Date();d.setDate(d.getDate()-i);days.push(d.toDateString()); }
+    var daily = {};
+    (dls||[]).forEach(function(dl) { var d=new Date(dl.timestamp||dl).toDateString(); daily[d]=(daily[d]||0)+1; });
+    var max = Math.max(1, ...days.map(function(d){return daily[d]||0}));
+    var c = document.getElementById("barChartContainer"); c.innerHTML = "";
+    days.forEach(function(d) {
+      var v = daily[d]||0; var pct = Math.max(4,(v/max)*105);
+      var b = document.createElement("div"); b.className="bar";
+      b.style.height=pct+"px"; b.style.background=v>0?"linear-gradient(180deg,#F5C518,#E5B515)":"rgba(255,255,255,0.05)";
+      b.innerHTML='<span class="tip">'+v+'</span>'; c.appendChild(b);
+    });
+  }
+
+  function renderActivity(dls, sgps) {
+    var all = [];
+    (dls||[]).forEach(function(dl) {
+      var ts = dl.timestamp||dl; var d = new Date(ts);
+      all.push({date:d.toLocaleDateString()+" "+d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),event:"Cheatsheet Downloaded",source:dl.source||"Vault",country:dl.country||"—",device:dl.device||"—",status:"Completed",color:"green"});
+    });
+    (sgps||[]).forEach(function(sg) {
+      var ts = sg.timestamp||sg; var d = new Date(ts);
+      all.push({date:d.toLocaleDateString()+" "+d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),event:"Webinar Signup",source:sg.source||"Vault Form",country:sg.country||"—",device:sg.device||"—",status:"Confirmed",color:"yellow"});
+    });
+    all.sort(function(a,b){return new Date(b.date)-new Date(a.date)}); all = all.slice(0,25);
+    var tbl = document.getElementById("activityTable");
+    while(tbl.rows.length>1) tbl.deleteRow(1);
     document.getElementById("activityLoading").classList.add("hidden");
-
-    var allActivity = [];
-    dls.forEach(function(dl) {
-      var ts = dl.timestamp || dl;
-      var d = new Date(ts);
-      allActivity.push({
-        date: d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}),
-        event: "Cheatsheet Downloaded",
-        source: dl.source || "Direct",
-        status: "Completed",
-        isDownload: true
-      });
+    if(!all.length) { var r=tbl.insertRow(); var c=r.insertCell();c.colSpan=6;c.textContent="No activity yet. Share the vault to start collecting data.";c.style.textAlign="center";c.style.color="var(--muted)";c.style.padding="20px"; return; }
+    all.forEach(function(a) {
+      var r=tbl.insertRow(); r.insertCell().textContent=a.date; r.insertCell().textContent=a.event; r.insertCell().textContent=a.source;
+      r.insertCell().textContent=a.country; r.insertCell().textContent=a.device;
+      var sc=r.insertCell(); var tg=document.createElement("span"); tg.style.cssText="display:inline-block;padding:1px 8px;border-radius:100px;font-size:10px;font-weight:600;background:"+(a.color==='green'?'rgba(5,177,105,0.15)':'rgba(245,197,24,0.15)')+";color:"+(a.color==='green'?'#05B169':'#F5C518');tg.textContent=a.status;sc.appendChild(tg);
     });
-    sgps.forEach(function(sg) {
-      var ts = sg.timestamp || sg;
-      var d = new Date(ts);
-      allActivity.push({
-        date: d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}),
-        event: "Webinar Signup",
-        source: sg.source || "Vault",
-        status: "Confirmed",
-        isSignup: true
-      });
-    });
+  }
 
-    allActivity.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
-    allActivity = allActivity.slice(0, 20);
+  function setNum(id, n) { document.getElementById(id).textContent = typeof n==='number' ? n.toLocaleString() : (n||'—'); }
+  function setTime(id, sec) {
+    if(!sec) { document.getElementById(id).textContent = '—'; return; }
+    var m = Math.floor(sec/60); var s = sec%60;
+    document.getElementById(id).textContent = m+'m '+s+'s';
+  }
 
-    // Clear old rows (keep header)
-    while (table.rows.length > 1) table.deleteRow(1);
-
-    if (allActivity.length === 0) {
-      var row = table.insertRow();
-      var cell = row.insertCell();
-      cell.colSpan = 4;
-      cell.textContent = "No activity yet. Share the vault to start seeing data.";
-      cell.style.textAlign = "center";
-      cell.style.color = "var(--muted)";
-      cell.style.padding = "20px";
-    } else {
-      allActivity.forEach(function(a) {
-        var row = table.insertRow();
-        row.insertCell().textContent = a.date;
-        row.insertCell().textContent = a.event;
-        row.insertCell().textContent = a.source;
-        var statusCell = row.insertCell();
-        var tag = document.createElement("span");
-        tag.className = "tag " + (a.isDownload ? "yellow" : a.isSignup ? "green" : "");
-        tag.textContent = a.status;
-        statusCell.appendChild(tag);
-      });
+  // Drawer
+  window.openDrawer = function() {
+    var d = load();
+    document.getElementById("ga-views").value = d.views||'';
+    document.getElementById("ga-new-users").value = d.newUsers||'';
+    document.getElementById("ga-returning").value = d.returning||'';
+    document.getElementById("ga-sessions").value = d.sessions||'';
+    document.getElementById("ga-avg-session").value = d.avgSession||'';
+    document.getElementById("ga-bounce").value = d.bounce||'';
+    document.getElementById("ga-active").value = d.active||'';
+    if(d.sources) {
+      document.getElementById("ga-src-direct").value = d.sources.direct||'';
+      document.getElementById("ga-src-organic").value = d.sources.organic||'';
+      document.getElementById("ga-src-social").value = d.sources.social||'';
+      document.getElementById("ga-src-referral").value = d.sources.referral||'';
+      document.getElementById("ga-src-other").value = d.sources.other||'';
     }
-  }
-
-  function addSampleDownload() {
-    var data = getData();
-    data.downloads = data.downloads || [];
-    data.downloads.push({
-      timestamp: new Date().toISOString(),
-      source: "Direct Link"
-    });
-    saveData(data);
-    renderDashboard(data);
-    showToast("Sample download added!");
-  }
-
-  function addSampleSignup() {
-    var data = getData();
-    data.signups = data.signups || [];
-    data.signups.push({
-      timestamp: new Date().toISOString(),
-      source: "Vault Webinar Form"
-    });
-    saveData(data);
-    renderDashboard(data);
-    showToast("Sample signup added!");
-  }
-
-  function addDemoData() {
-    var data = getData();
-    data.pageViews = 142;
-    // Add random downloads over last 7 days
-    var dlCount = Math.floor(Math.random() * 15) + 8;
-    for (var i = 0; i < dlCount; i++) {
-      var d = new Date();
-      d.setDate(d.getDate() - Math.floor(Math.random() * 7));
-      d.setHours(Math.floor(Math.random() * 12) + 8);
-      data.downloads.push({ timestamp: d.toISOString(), source: "Vault" });
+    if(d.devices) {
+      document.getElementById("dev-desktop").value = d.devices.desktop||'';
+      document.getElementById("dev-mobile").value = d.devices.mobile||'';
+      document.getElementById("dev-tablet").value = d.devices.tablet||'';
     }
-    var sgCount = Math.floor(Math.random() * 5) + 2;
-    for (var i = 0; i < sgCount; i++) {
-      var d = new Date();
-      d.setDate(d.getDate() - Math.floor(Math.random() * 14));
-      data.signups.push({ timestamp: d.toISOString(), source: "Vault Form" });
+    if(d.geo) { d.geo.forEach(function(g,i){ if(i<5) {
+      document.getElementById("geo-"+(i+1)+"-name").value = g.name||'';
+      document.getElementById("geo-"+(i+1)+"-val").value = g.val||'';
+    }});}
+    if(d.pages) { d.pages.forEach(function(p,i){ if(i<5) {
+      document.getElementById("page-"+(i+1)+"-name").value = p.name||'';
+      document.getElementById("page-"+(i+1)+"-val").value = p.val||'';
+    }});}
+    document.getElementById("drawerOverlay").classList.add("active");
+    document.getElementById("drawer").classList.add("active");
+  };
+  window.closeDrawer = function() {
+    document.getElementById("drawerOverlay").classList.remove("active");
+    document.getElementById("drawer").classList.remove("active");
+  };
+
+  window.saveGA = function() {
+    var d = load();
+    d.views = intOr("ga-views", d.views);
+    d.newUsers = intOr("ga-new-users", d.newUsers);
+    d.returning = intOr("ga-returning", d.returning);
+    d.sessions = intOr("ga-sessions", d.sessions);
+    d.avgSession = intOr("ga-avg-session", d.avgSession);
+    d.bounce = intOr("ga-bounce", d.bounce);
+    d.active = intOr("ga-active", d.active);
+    d.sources = {
+      direct: intOr("ga-src-direct", 0),
+      organic: intOr("ga-src-organic", 0),
+      social: intOr("ga-src-social", 0),
+      referral: intOr("ga-src-referral", 0),
+      other: intOr("ga-src-other", 0)
+    };
+    d.devices = {
+      desktop: intOr("dev-desktop", 0),
+      mobile: intOr("dev-mobile", 0),
+      tablet: intOr("dev-tablet", 0)
+    };
+    d.geo = [];
+    for(var i=1;i<=5;i++) {
+      var n = document.getElementById("geo-"+i+"-name").value;
+      var v = parseInt(document.getElementById("geo-"+i+"-val").value)||0;
+      if(n) d.geo.push({name:n,val:v});
     }
-    saveData(data);
-    renderDashboard(data);
-  }
+    d.pages = [];
+    for(var i=1;i<=5;i++) {
+      var n = document.getElementById("page-"+i+"-name").value;
+      var v = parseInt(document.getElementById("page-"+i+"-val").value)||0;
+      if(n) d.pages.push({name:n,val:v});
+    }
+    d.lastSync = new Date().toLocaleString();
+    save(d);
+    renderAll(d);
+    closeDrawer();
+    showToast("Dashboard synced with GA4 data!");
+  };
 
-  function showToast(msg) {
-    var t = document.createElement("div");
-    t.textContent = msg;
-    Object.assign(t.style, {
-      position:"fixed", bottom:"20px", right:"20px", background:"#FFF", color:"#000",
-      padding:"10px 20px", borderRadius:"10px", fontSize:"13px", fontWeight:"600",
-      boxShadow:"0 4px 20px rgba(0,0,0,0.3)", zIndex:"999", transition:"all .3s"
-    });
-    document.body.appendChild(t);
-    setTimeout(function() { t.style.opacity = "0"; setTimeout(function() { t.remove(); }, 300); }, 2000);
-  }
-
-  window.refreshData = function() {
-    renderDashboard(getData());
+  window.refreshAll = function() {
+    renderAll(load());
     showToast("Dashboard refreshed!");
   };
 
-  // Expose for console testing
-  window.addDownload = addSampleDownload;
-  window.addSignup = addSampleSignup;
+  window.resetAll = function() {
+    if(!confirm("Reset all dashboard data?")) return;
+    localStorage.removeItem(LS);
+    document.getElementById("drawerOverlay").classList.remove("active");
+    document.getElementById("drawer").classList.remove("active");
+    renderAll(defData());
+    showToast("Reset to defaults");
+  };
+
+  function intOr(id, def) { var v=parseInt(document.getElementById(id).value); return isNaN(v)?(def||0):v; }
+
+  function showToast(msg) {
+    var t=document.createElement("div");
+    t.textContent=msg;
+    Object.assign(t.style,{position:"fixed",bottom:"20px",left:"50%",transform:"translateX(-50%)",background:"#FFF",color:"#000",padding:"10px 24px",borderRadius:"10px",fontSize:"13px",fontWeight:"600",boxShadow:"0 4px 20px rgba(0,0,0,0.3)",zIndex:"999",transition:"all .3s",whiteSpace:"nowrap"});
+    document.body.appendChild(t);
+    setTimeout(function(){t.style.opacity="0";setTimeout(function(){t.remove()},300)},2000);
+  }
 
   init();
 })();
 </script>
-
-<!-- Dev buttons (hidden by default, uncomment to test) -->
-<!--
-<div style="position:fixed;bottom:20px;left:20px;display:flex;gap:8px">
-  <button onclick="addDownload()" style="padding:8px 16px;background:var(--yellow);color:#000;border:none;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer">+ Add Download</button>
-  <button onclick="addSignup()" style="padding:8px 16px;background:var(--purple);color:#fff;border:none;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer">+ Add Signup</button>
-</div>
--->
 </body>
 </html>
