@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Vault — Analytics Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-font-smoothing:antialiased}
+body{background:#0A0A0A;color:#FFF;font-family:'Inter',sans-serif;font-size:15px;line-height:1.5}
+a{text-decoration:none;color:inherit}
+:root{--bg:#0A0A0A;--card:#141414;--card-hover:#1A1A1A;--border:rgba(255,255,255,0.06);--border-light:rgba(255,255,255,0.1);--yellow:#F5C518;--muted:rgba(255,255,255,0.4);--muted-soft:rgba(255,255,255,0.55);--green:#05B169;--red:#E53935;--blue:#3B82F6;--purple:#8B5CF6;--radius:12px;--radius-lg:16px;--radius-xl:20px;--radius-pill:100px}
+
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* ─── NAV ─── */
+.nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 0;border-bottom:1px solid var(--border);
+}
+.nav-brand{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:700;letter-spacing:-0.3px}
+.nav-brand .ylw{color:var(--yellow)}
+.nav-links{display:flex;align-items:center;gap:16px}
+.nav-links a{font-size:13px;color:var(--muted);transition:color .2s}
+.nav-links a:hover{color:#FFF}
+.nav-links .active{color:var(--yellow)}
+
+/* ─── HEADER ─── */
+.header{padding:40px 0 32px}
+.header h1{font-size:28px;font-weight:700;letter-spacing:-0.5px;margin-bottom:6px}
+.header p{color:var(--muted-soft);font-size:14px}
+.header .badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(245,197,24,0.1);color:var(--yellow);
+  font-size:11px;font-weight:600;padding:4px 12px;border-radius:var(--radius-pill);
+  margin-bottom:12px;
+}
+
+/* ─── GRID ─── */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:20px;transition:all .2s;
+}
+.card:hover{border-color:var(--border-light);background:var(--card-hover)}
+.card .label{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.03em}
+.card .value{font-size:32px;font-weight:700;letter-spacing:-0.5px;line-height:1.1}
+.card .change{font-size:12px;margin-top:4px;font-weight:500}
+.card .change.up{color:var(--green)}
+.card .change.down{color:var(--red)}
+.card .sub{font-size:12px;color:var(--muted-soft);margin-top:2px}
+.card .icon{font-size:18px;margin-bottom:8px;display:block}
+
+/* ─── CHARTS ROW ─── */
+.charts-row{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px}
+.chart-card h3{font-size:14px;font-weight:600;margin-bottom:16px}
+.chart-card .bar-group{display:flex;align-items:flex-end;gap:6px;height:140px;padding:0 4px}
+.chart-card .bar{
+  flex:1;border-radius:4px 4px 0 0;min-height:4px;position:relative;
+  transition:all .3s;cursor:pointer;
+}
+.chart-card .bar:hover{opacity:.8}
+.chart-card .bar .tooltip{
+  position:absolute;bottom:100%;left:50%;transform:translateX(-50%);
+  background:#FFF;color:#000;font-size:10px;font-weight:600;
+  padding:3px 8px;border-radius:6px;white-space:nowrap;opacity:0;pointer-events:none;
+  transition:opacity .2s;margin-bottom:4px;
+}
+.chart-card .bar:hover .tooltip{opacity:1}
+.chart-labels{display:flex;justify-content:space-between;margin-top:8px;font-size:10px;color:var(--muted)}
+
+/* ─── TABLE ─── */
+.table-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:24px}
+.table-card h3{font-size:14px;font-weight:600;margin-bottom:12px}
+.table-card table{width:100%;border-collapse:collapse}
+.table-card th{text-align:left;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;padding:8px 12px;border-bottom:1px solid var(--border)}
+.table-card td{padding:10px 12px;font-size:13px;border-bottom:1px solid var(--border);color:var(--muted-soft)}
+.table-card td:first-child{font-weight:600;color:#FFF}
+.table-card .tag{display:inline-block;padding:2px 8px;border-radius:var(--radius-pill);font-size:10px;font-weight:600}
+.table-card .tag.green{background:rgba(5,177,105,0.15);color:var(--green)}
+.table-card .tag.yellow{background:rgba(245,197,24,0.15);color:var(--yellow)}
+.table-card .tag.purple{background:rgba(139,92,246,0.15);color:var(--purple)}
+
+/* ─── SETTINGS SECTION ─── */
+.settings{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:24px}
+.settings h3{font-size:14px;font-weight:600;margin-bottom:12px}
+.settings p{font-size:12px;color:var(--muted-soft);margin-bottom:12px;line-height:1.6}
+.settings .btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 20px;border-radius:var(--radius-pill);font-size:12px;font-weight:600;
+  border:none;cursor:pointer;transition:all .2s;
+}
+.settings .btn.primary{background:var(--yellow);color:#000}
+.settings .btn.primary:hover{transform:translateY(-1px);opacity:.9}
+.settings .btn.secondary{background:rgba(255,255,255,0.06);color:#FFF;border:1px solid var(--border)}
+.settings .btn.secondary:hover{background:rgba(255,255,255,0.1)}
+
+/* ─── FOOTER ─── */
+.footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;font-size:12px;color:var(--muted);margin-top:24px}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:768px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .charts-row{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .grid{grid-template-columns:1fr}
+  .header h1{font-size:22px}
+  .card .value{font-size:26px}
+}
+
+/* ═══ LOADING ═══ */
+.loading{display:flex;align-items:center;justify-content:center;padding:40px;color:var(--muted)}
+.spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--yellow);border-radius:50%;animation:spin .6s linear infinite;margin-right:10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hidden{display:none}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-brand"><span class="ylw">samey</span>.unfolds <span style="font-size:11px;color:var(--muted);font-weight:400;margin-left:4px">/ dashboard</span></div>
+    <div class="nav-links">
+      <a href="https://sameyunfolds.github.io/the-ai-vault/" target="_blank">Vault</a>
+      <a href="https://analytics.google.com/" target="_blank">GA4</a>
+      <a href="#" class="active">Dashboard</a>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="badge">&#9679; Live dashboard</div>
+    <h1>Analytics Dashboard</h1>
+    <p>Track your vault's performance — page views, downloads, and webinar signups in one place.</p>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="grid" id="statsGrid">
+    <div class="card" style="border-left:3px solid var(--yellow)">
+      <span class="icon">&#128065;</span>
+      <div class="label">Page Views</div>
+      <div class="value" id="pageViews">—</div>
+      <div class="sub">Last 30 days</div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--green)">
+      <span class="icon">&#128229;</span>
+      <div class="label">Cheatsheet Downloads</div>
+      <div class="value" id="downloadCount">—</div>
+      <div class="sub">All time</div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--purple)">
+      <span class="icon">&#128186;</span>
+      <div class="label">Webinar Signups</div>
+      <div class="value" id="signupCount">—</div>
+      <div class="sub">All time</div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--blue)">
+      <span class="icon">&#128200;</span>
+      <div class="label">Conversion Rate</div>
+      <div class="value" id="conversionRate">—</div>
+      <div class="sub">Downloads ÷ Views</div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="charts-row">
+    <div class="chart-card">
+      <h3>Downloads (Last 7 Days)</h3>
+      <div id="downloadChart" class="bar-group"></div>
+      <div class="chart-labels"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+    </div>
+    <div class="chart-card">
+      <h3>Quick Links</h3>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <a href="https://analytics.google.com/" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);border-radius:var(--radius);font-size:13px;transition:all .2s">
+          <span style="font-size:16px">&#128202;</span>
+          <span style="flex:1;color:#FFF;font-weight:500">Google Analytics</span>
+          <span style="color:var(--muted)}">&#8599;</span>
+        </a>
+        <a href="https://sameyunfolds.github.io/the-ai-vault/" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);border-radius:var(--radius);font-size:13px;transition:all .2s">
+          <span style="font-size:16px">&#127760;</span>
+          <span style="flex:1;color:#FFF;font-weight:500">Visit AI Vault</span>
+          <span style="color:var(--muted)}">&#8599;</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity Table -->
+  <div class="table-card">
+    <h3>Recent Activity</h3>
+    <table id="activityTable">
+      <tr><th>Date</th><th>Event</th><th>Source</th><th>Status</th></tr>
+    </table>
+    <div id="activityLoading" class="loading" style="padding:20px"><div class="spinner"></div>Loading activity...</div>
+  </div>
+
+  <!-- Settings / GA4 Connect -->
+  <div class="settings">
+    <h3>&#9881; Connect Google Analytics</h3>
+    <p>Your GA4 tag <strong>G-EH8T30QFGY</strong> is already installed on the vault. Page views and download events are being collected automatically.</p>
+    <p>Visit <a href="https://analytics.google.com/" target="_blank" style="color:var(--yellow)">Google Analytics</a> to see full reports — real-time users, traffic sources, device breakdown, and more. Your dashboard below shows vault-specific data tracked locally.</p>
+    <div style="display:flex;gap:10px;margin-top:4px">
+      <a href="https://analytics.google.com/" target="_blank" class="btn primary">&#128202; Open GA4</a>
+      <button class="btn secondary" onclick="refreshData()">&#8635; Refresh Data</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">samey.unfolds &middot; AI Vault Dashboard &middot; Updated in real-time</div>
+</div>
+
+<script>
+(function() {
+  var LS_KEY = "vault_analytics";
+
+  function getData() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY)) || defaultData(); }
+    catch(e) { return defaultData(); }
+  }
+
+  function defaultData() {
+    return {
+      pageViews: 0,
+      downloads: [],
+      signups: [],
+      dailyViews: {},
+      lastUpdated: new Date().toISOString()
+    };
+  }
+
+  function saveData(d) {
+    localStorage.setItem(LS_KEY, JSON.stringify(d));
+  }
+
+  function init() {
+    var data = getData();
+
+    // Track page view (once per session)
+    if (!sessionStorage.getItem("vault_viewed")) {
+      sessionStorage.setItem("vault_viewed", "1");
+      data.pageViews = (data.pageViews || 0) + 1;
+      var today = new Date().toDateString();
+      data.dailyViews = data.dailyViews || {};
+      data.dailyViews[today] = (data.dailyViews[today] || 0) + 1;
+      saveData(data);
+    }
+
+    renderDashboard(data);
+
+    // Check for URL param to add sample data for demo
+    if (window.location.hash === "#demo") {
+      addDemoData();
+    }
+  }
+
+  function renderDashboard(data) {
+    var dls = data.downloads || [];
+    var sgps = data.signups || [];
+    var views = data.pageViews || 0;
+    var dv = data.dailyViews || {};
+
+    // Stats
+    document.getElementById("pageViews").textContent = views.toLocaleString();
+    document.getElementById("downloadCount").textContent = dls.length.toLocaleString();
+    document.getElementById("signupCount").textContent = sgps.length.toLocaleString();
+    document.getElementById("conversionRate").textContent = views > 0 ? (dls.length / views * 100).toFixed(1) + "%" : "—";
+
+    // Download bar chart (last 7 days)
+    var days = [];
+    var dayNames = [];
+    for (var i = 6; i >= 0; i--) {
+      var d = new Date(); d.setDate(d.getDate() - i);
+      days.push(d.toDateString());
+      dayNames.push(d.toLocaleDateString('en', {weekday:'short'}));
+    }
+
+    var dailyDls = {};
+    dls.forEach(function(dl) {
+      var d = new Date(dl.timestamp || dl).toDateString();
+      dailyDls[d] = (dailyDls[d] || 0) + 1;
+    });
+
+    var maxVal = Math.max(1, ...days.map(function(d) { return dailyDls[d] || 0; }));
+    var chartEl = document.getElementById("downloadChart");
+    chartEl.innerHTML = "";
+    days.forEach(function(d) {
+      var val = dailyDls[d] || 0;
+      var pct = Math.max(4, (val / maxVal) * 130);
+      var bar = document.createElement("div");
+      bar.className = "bar";
+      bar.style.height = pct + "px";
+      bar.style.background = val > 0 ? "linear-gradient(180deg, #F5C518, #E5B515)" : "rgba(255,255,255,0.06)";
+      bar.innerHTML = '<span class="tooltip">' + val + '</span>';
+      chartEl.appendChild(bar);
+    });
+
+    // Update chart labels
+    var labels = chartEl.parentElement.querySelectorAll(".chart-labels span");
+    dayNames.forEach(function(name, i) {
+      if (labels[i]) labels[i].textContent = name;
+    });
+
+    // Activity table
+    var table = document.getElementById("activityTable");
+    document.getElementById("activityLoading").classList.add("hidden");
+
+    var allActivity = [];
+    dls.forEach(function(dl) {
+      var ts = dl.timestamp || dl;
+      var d = new Date(ts);
+      allActivity.push({
+        date: d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}),
+        event: "Cheatsheet Downloaded",
+        source: dl.source || "Direct",
+        status: "Completed",
+        isDownload: true
+      });
+    });
+    sgps.forEach(function(sg) {
+      var ts = sg.timestamp || sg;
+      var d = new Date(ts);
+      allActivity.push({
+        date: d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}),
+        event: "Webinar Signup",
+        source: sg.source || "Vault",
+        status: "Confirmed",
+        isSignup: true
+      });
+    });
+
+    allActivity.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+    allActivity = allActivity.slice(0, 20);
+
+    // Clear old rows (keep header)
+    while (table.rows.length > 1) table.deleteRow(1);
+
+    if (allActivity.length === 0) {
+      var row = table.insertRow();
+      var cell = row.insertCell();
+      cell.colSpan = 4;
+      cell.textContent = "No activity yet. Share the vault to start seeing data.";
+      cell.style.textAlign = "center";
+      cell.style.color = "var(--muted)";
+      cell.style.padding = "20px";
+    } else {
+      allActivity.forEach(function(a) {
+        var row = table.insertRow();
+        row.insertCell().textContent = a.date;
+        row.insertCell().textContent = a.event;
+        row.insertCell().textContent = a.source;
+        var statusCell = row.insertCell();
+        var tag = document.createElement("span");
+        tag.className = "tag " + (a.isDownload ? "yellow" : a.isSignup ? "green" : "");
+        tag.textContent = a.status;
+        statusCell.appendChild(tag);
+      });
+    }
+  }
+
+  function addSampleDownload() {
+    var data = getData();
+    data.downloads = data.downloads || [];
+    data.downloads.push({
+      timestamp: new Date().toISOString(),
+      source: "Direct Link"
+    });
+    saveData(data);
+    renderDashboard(data);
+    showToast("Sample download added!");
+  }
+
+  function addSampleSignup() {
+    var data = getData();
+    data.signups = data.signups || [];
+    data.signups.push({
+      timestamp: new Date().toISOString(),
+      source: "Vault Webinar Form"
+    });
+    saveData(data);
+    renderDashboard(data);
+    showToast("Sample signup added!");
+  }
+
+  function addDemoData() {
+    var data = getData();
+    data.pageViews = 142;
+    // Add random downloads over last 7 days
+    var dlCount = Math.floor(Math.random() * 15) + 8;
+    for (var i = 0; i < dlCount; i++) {
+      var d = new Date();
+      d.setDate(d.getDate() - Math.floor(Math.random() * 7));
+      d.setHours(Math.floor(Math.random() * 12) + 8);
+      data.downloads.push({ timestamp: d.toISOString(), source: "Vault" });
+    }
+    var sgCount = Math.floor(Math.random() * 5) + 2;
+    for (var i = 0; i < sgCount; i++) {
+      var d = new Date();
+      d.setDate(d.getDate() - Math.floor(Math.random() * 14));
+      data.signups.push({ timestamp: d.toISOString(), source: "Vault Form" });
+    }
+    saveData(data);
+    renderDashboard(data);
+  }
+
+  function showToast(msg) {
+    var t = document.createElement("div");
+    t.textContent = msg;
+    Object.assign(t.style, {
+      position:"fixed", bottom:"20px", right:"20px", background:"#FFF", color:"#000",
+      padding:"10px 20px", borderRadius:"10px", fontSize:"13px", fontWeight:"600",
+      boxShadow:"0 4px 20px rgba(0,0,0,0.3)", zIndex:"999", transition:"all .3s"
+    });
+    document.body.appendChild(t);
+    setTimeout(function() { t.style.opacity = "0"; setTimeout(function() { t.remove(); }, 300); }, 2000);
+  }
+
+  window.refreshData = function() {
+    renderDashboard(getData());
+    showToast("Dashboard refreshed!");
+  };
+
+  // Expose for console testing
+  window.addDownload = addSampleDownload;
+  window.addSignup = addSampleSignup;
+
+  init();
+})();
+</script>
+
+<!-- Dev buttons (hidden by default, uncomment to test) -->
+<!--
+<div style="position:fixed;bottom:20px;left:20px;display:flex;gap:8px">
+  <button onclick="addDownload()" style="padding:8px 16px;background:var(--yellow);color:#000;border:none;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer">+ Add Download</button>
+  <button onclick="addSignup()" style="padding:8px 16px;background:var(--purple);color:#fff;border:none;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer">+ Add Signup</button>
+</div>
+-->
+</body>
+</html>
